@@ -3,7 +3,7 @@ package org.example.clothingstore.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User extends BaseEntity {
 

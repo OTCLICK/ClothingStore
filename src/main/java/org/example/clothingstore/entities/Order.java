@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Order extends BaseEntity {
 
