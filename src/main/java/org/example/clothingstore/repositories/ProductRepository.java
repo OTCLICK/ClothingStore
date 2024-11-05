@@ -10,7 +10,8 @@ public interface ProductRepository {
 
     void save(Product product);
     void update(Product product);
-    Product findById(Class<Product> productClass, int id);
+//    Product findById(Class<Product> productClass, int id);
     List<Product> findAll();
+    Product findByProductName(String productName);
 
 }

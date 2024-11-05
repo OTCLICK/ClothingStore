@@ -9,6 +9,7 @@ import java.util.List;
 public interface BrandRepository {
 
     void save(Brand brand);
-    Brand findById(Class<Brand> brandClass, int id);
+//    Brand findById(Class<Brand> brandClass, int id);
+    Brand findByBrandName(String brandName);
 
 }

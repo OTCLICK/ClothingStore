@@ -9,7 +9,8 @@ import java.util.List;
 public interface ClothingCategoryRepository {
 
     void save(ClothingCategory clothingCategory);
-    ClothingCategory findById(Class<ClothingCategory> clothingCategoryClass, int id);
+//    ClothingCategory findById(Class<ClothingCategory> clothingCategoryClass, int id);
     List<ClothingCategory> findAll();
+    ClothingCategory findByCategoryName(String categoryName);
 
 }
