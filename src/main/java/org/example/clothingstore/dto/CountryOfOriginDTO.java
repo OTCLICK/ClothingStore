@@ -7,6 +7,8 @@ public class CountryOfOriginDTO {
     private Brand brand;
     private String country;
 
+    public CountryOfOriginDTO() {}
+
     public CountryOfOriginDTO(Brand brand, String country) {
         setBrand(brand);
         setCountry(country);

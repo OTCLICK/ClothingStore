@@ -9,7 +9,7 @@ import java.util.List;
 public interface DiscountCouponRepository {
 
     void save(DiscountCoupon discountCoupon);
-    DiscountCoupon findById(Class<DiscountCoupon> discountCouponClass, int id);
+    DiscountCoupon findById(int id);
     List<DiscountCoupon> findByDiscountPercentage(float discountPercentage);
 
 }

@@ -7,6 +7,8 @@ public class QuantityInStockDTO {
     private Product product;
     private int quantityOfProduct;
 
+    public QuantityInStockDTO() {}
+
     public QuantityInStockDTO(Product product, int quantityOfProduct) {
         setProduct(product);
         setQuantityOfProduct(quantityOfProduct);

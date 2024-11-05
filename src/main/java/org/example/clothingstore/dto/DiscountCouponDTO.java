@@ -11,6 +11,8 @@ public class DiscountCouponDTO {
     private float discountPercentage;
     private float minOrderAmount;
 
+    public DiscountCouponDTO() {}
+
     public DiscountCouponDTO(int couponId, ClothingCategory clothingCategory, Brand brand, float discountPercentage, float minOrderAmount) {
         setCouponId(couponId);
         setClothingCategory(clothingCategory);

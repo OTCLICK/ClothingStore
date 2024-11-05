@@ -2,6 +2,7 @@ package org.example.clothingstore.repositories.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.example.clothingstore.entities.ClothingCategory;
 import org.example.clothingstore.entities.User;
 import org.example.clothingstore.repositories.BaseCURepository;
 import org.example.clothingstore.repositories.UserRepository;
@@ -17,4 +18,9 @@ public class UserRepositoryImpl extends BaseCURepository<User> implements UserRe
         super(User.class);
     }
 
+    @Override
+    public User findByUsername(String username) {
+        return em.createQuery("SELECT u FROM User u WHERE u.username = :username",
+                User.class).setParameter("username", username).getSingleResult();
+    }
 }

@@ -15,6 +15,8 @@ public class OrderDTO {
     private OrderStatusEnum orderStatus;
     private int quantityOfProducts;
 
+    public OrderDTO() {}
+
     public OrderDTO(User user, DiscountCoupon discountCoupon, Date date, float orderAmount, OrderStatusEnum orderStatus, int quantityOfProducts) {
         setUser(user);
         setDiscountCoupon(discountCoupon);

@@ -7,6 +7,8 @@ public class ClothingCategoryDTO {
     private String categoryName;
     private SeasonEnum season;
 
+    public ClothingCategoryDTO() {}
+
     public ClothingCategoryDTO(SeasonEnum season, String categoryName) {
         setSeason(season);
         setCategoryName(categoryName);

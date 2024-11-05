@@ -12,6 +12,8 @@ public class ProductDTO {
     private String size;
     private String price;
 
+    public ProductDTO() {}
+
     public ProductDTO(ClothingCategory clothingCategory, Brand brand, String productName, String color, String size, String price) {
         setClothingCategory(clothingCategory);
         setBrand(brand);
