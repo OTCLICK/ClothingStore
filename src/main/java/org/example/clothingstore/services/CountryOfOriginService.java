@@ -1,7 +1,6 @@
-package org.example.clothingstore.service;
+package org.example.clothingstore.services;
 
 import org.example.clothingstore.dto.CountryOfOriginDTO;
-import org.example.clothingstore.entities.CountryOfOrigin;
 
 public interface CountryOfOriginService {
 

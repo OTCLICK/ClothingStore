@@ -1,13 +1,12 @@
-package org.example.clothingstore.service.impl;
+package org.example.clothingstore.services.impl;
 
 import jakarta.validation.ConstraintViolation;
 import org.example.clothingstore.dto.ProductDTO;
-import org.example.clothingstore.entities.Order;
 import org.example.clothingstore.entities.Product;
 import org.example.clothingstore.repositories.ProductRepository;
-import org.example.clothingstore.service.BrandService;
-import org.example.clothingstore.service.ClothingCategoryService;
-import org.example.clothingstore.service.ProductService;
+import org.example.clothingstore.services.BrandService;
+import org.example.clothingstore.services.ClothingCategoryService;
+import org.example.clothingstore.services.ProductService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.modelmapper.ModelMapper;
 

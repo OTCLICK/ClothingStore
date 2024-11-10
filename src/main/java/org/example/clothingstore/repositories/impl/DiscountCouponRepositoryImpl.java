@@ -20,9 +20,15 @@ public class DiscountCouponRepositoryImpl extends BaseCRRepository<DiscountCoupo
     }
 
     @Override
+    public DiscountCoupon findById(int id) {
+        return em.createQuery("SELECT dc FROM DiscountCoupon dc WHERE dc.id = :id", DiscountCoupon.class).
+                setParameter("id", id).getSingleResult();
+    }
+
+    @Override
     public List<DiscountCoupon> findByDiscountPercentage(float discountPercentage) {
         return em.createQuery("SELECT dc FROM DiscountCoupon dc WHERE " +
-                "dc.discountPercentage = :discountPercentage", DiscountCoupon.class).
+                        "dc.discountPercentage = :discountPercentage", DiscountCoupon.class).
                 setParameter("discountPercentage", discountPercentage).getResultList();
     }
 }

@@ -1,15 +1,14 @@
-package org.example.clothingstore.service.impl;
+package org.example.clothingstore.services.impl;
 
 import jakarta.validation.ConstraintViolation;
 import org.example.clothingstore.dto.BrandDTO;
 import org.example.clothingstore.entities.Brand;
 import org.example.clothingstore.repositories.BrandRepository;
-import org.example.clothingstore.service.BrandService;
+import org.example.clothingstore.services.BrandService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ValidationUtils;
 
 @Service
 public class BrandServiceImpl implements BrandService {

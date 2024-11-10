@@ -1,11 +1,11 @@
-package org.example.clothingstore.service.impl;
+package org.example.clothingstore.services.impl;
 
 import jakarta.validation.ConstraintViolation;
 import org.example.clothingstore.dto.CountryOfOriginDTO;
 import org.example.clothingstore.entities.CountryOfOrigin;
 import org.example.clothingstore.repositories.CountryOfOriginRepository;
-import org.example.clothingstore.service.BrandService;
-import org.example.clothingstore.service.CountryOfOriginService;
+import org.example.clothingstore.services.BrandService;
+import org.example.clothingstore.services.CountryOfOriginService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

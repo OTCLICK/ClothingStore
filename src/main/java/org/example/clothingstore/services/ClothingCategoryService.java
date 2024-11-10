@@ -1,6 +1,5 @@
-package org.example.clothingstore.service;
+package org.example.clothingstore.services;
 
-import org.example.clothingstore.dto.ClothingCategoryDTO;
 import org.example.clothingstore.entities.ClothingCategory;
 import org.example.clothingstore.entities.SeasonEnum;
 

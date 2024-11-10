@@ -1,7 +1,6 @@
-package org.example.clothingstore.service;
+package org.example.clothingstore.services;
 
 import org.example.clothingstore.dto.OrderDTO;
-import org.example.clothingstore.entities.Order;
 
 public interface OrderService {
 

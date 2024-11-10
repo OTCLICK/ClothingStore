@@ -1,13 +1,12 @@
-package org.example.clothingstore.service.impl;
+package org.example.clothingstore.services.impl;
 
 import jakarta.validation.ConstraintViolation;
 import org.example.clothingstore.dto.DiscountCouponDTO;
-import org.example.clothingstore.entities.CountryOfOrigin;
 import org.example.clothingstore.entities.DiscountCoupon;
 import org.example.clothingstore.repositories.DiscountCouponRepository;
-import org.example.clothingstore.service.BrandService;
-import org.example.clothingstore.service.ClothingCategoryService;
-import org.example.clothingstore.service.DiscountCouponService;
+import org.example.clothingstore.services.BrandService;
+import org.example.clothingstore.services.ClothingCategoryService;
+import org.example.clothingstore.services.DiscountCouponService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

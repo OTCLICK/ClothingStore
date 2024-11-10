@@ -1,12 +1,10 @@
-package org.example.clothingstore.service.impl;
+package org.example.clothingstore.services.impl;
 
 import jakarta.validation.ConstraintViolation;
-import org.example.clothingstore.dto.BrandDTO;
 import org.example.clothingstore.dto.UserDTO;
-import org.example.clothingstore.entities.Brand;
 import org.example.clothingstore.entities.User;
 import org.example.clothingstore.repositories.UserRepository;
-import org.example.clothingstore.service.UserService;
+import org.example.clothingstore.services.UserService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

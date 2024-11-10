@@ -1,4 +1,4 @@
-package org.example.clothingstore.service;
+package org.example.clothingstore.services;
 
 import org.example.clothingstore.dto.QuantityInStockDTO;
 import org.example.clothingstore.entities.QuantityInStock;
