@@ -9,9 +9,11 @@ import org.example.clothingstore.services.ClothingCategoryService;
 import org.example.clothingstore.services.ProductService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ProductServiceImpl implements ProductService {
 
     public final ProductRepository productRepository;

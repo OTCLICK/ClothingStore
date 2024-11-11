@@ -8,9 +8,11 @@ import org.example.clothingstore.services.ProductService;
 import org.example.clothingstore.services.QuantityInStockService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class QuantityInStockServiceImpl implements QuantityInStockService {
 
     public final QuantityInStockRepository quantityInStockRepository;

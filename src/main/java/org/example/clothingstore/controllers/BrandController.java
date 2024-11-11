@@ -17,9 +17,14 @@ public class BrandController {
         this.brandService = brandService;
     }
 
-    @PostMapping("/add/{brandName}")
-    public void createBrand(@PathVariable String brandName) {
+    @PostMapping("/add")
+    public void createBrand(@RequestBody String brandName) {
         brandService.addBrand(brandName);
     }
+
+//    @GetMapping("/find")
+//    public BrandDTO findBrand(@RequestParam String brandName) {
+//        return brandService.findByBrandName(brandName);
+//    }
 
 }
