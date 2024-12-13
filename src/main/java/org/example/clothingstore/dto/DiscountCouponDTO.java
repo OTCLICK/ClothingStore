@@ -5,7 +5,7 @@ import org.example.clothingstore.entities.ClothingCategory;
 
 public class DiscountCouponDTO {
 
-    private int couponId;
+    private String couponId;
     private ClothingCategory clothingCategory;
     private Brand brand;
     private float discountPercentage;
@@ -13,7 +13,7 @@ public class DiscountCouponDTO {
 
     public DiscountCouponDTO() {}
 
-    public DiscountCouponDTO(int couponId, ClothingCategory clothingCategory, Brand brand, float discountPercentage, float minOrderAmount) {
+    public DiscountCouponDTO(String couponId, ClothingCategory clothingCategory, Brand brand, float discountPercentage, float minOrderAmount) {
         setCouponId(couponId);
         setClothingCategory(clothingCategory);
         setBrand(brand);
@@ -21,11 +21,11 @@ public class DiscountCouponDTO {
         setMinOrderAmount(minOrderAmount);
     }
 
-    public int getCouponId() {
+    public String getCouponId() {
         return couponId;
     }
 
-    public void setCouponId(int couponId) {
+    public void setCouponId(String couponId) {
         this.couponId = couponId;
     }
 

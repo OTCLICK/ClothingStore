@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${model.base.pageTitle}">Список товаров</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Подключите ваши стили -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #35424a;
+        }
+
+        p {
+            font-size: 1.1em;
+            text-align: center;
+            color: #555;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 10px;
+            margin: 0 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        .btn-primary {
+            background-color: orange; /* Оранжевый цвет для кнопки "Редактировать" */
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: darkorange; /* Темно-оранжевый при наведении */
+        }
+
+        .btn-second {
+            background-color: red; /* Красный цвет для кнопки "Удалить" */
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .btn-second:hover {
+            background-color: darkred; /* Темно-красный при наведении */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #35424a;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            display: inline;
+            margin: 0 5px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            color: #5cb85c;
+            padding: 5px 10px;
+            border: 1px solid #5cb85c;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .pagination a:hover {
+            background-color: #5cb85c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Clothing Store</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/products">Товары</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/orders">Заказы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/coupons">Купоны</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/">Профиль</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <h1 th:text="${model.base.pageTitle}">Список товаров</h1>
+    <p>Пользователь: <span th:text="${model.base.currentUser  }">Текущий пользователь</span></p>
+
+    <form action="#" th:action="@{/products}" method="get">
+        <button type="button" onclick="location.href='/admin/products/create-product'" class="btn btn-secondary">Создать товар</button>
+        <input type="text" name="searchWord" th:value="${form.searchWord}" placeholder="Поиск по названию продукта" />
+        <input type="number" name="page" th:value="${form.page}" min="1" placeholder="Страница" />
+        <input type="number" name="size" th:value="${form.size}" min="1" placeholder="Размер страницы" />
+        <button type="submit">Поиск</button>
+    </form>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Название продукта</th>
+            <th>Цена</th>
+            <th>Действия</th> <!-- Заголовок для действий -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${model.products}">
+            <td>
+                <a th:href="@{/products/{id}(id=${product.id})}" th:text="${product.name()}">Имя продукта</a>
+            </td>
+            <td th:text="${product.price}">Цена</td>
+            <td>
+                <a th:href="@{/admin/products/{id}/edit(id=${product.id})}" class="btn btn-primary">Редактировать</a>
+                <a th:href="@{/admin/products/{id}/delete(id=${product.id})}" class="btn btn-second">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <span>Страницы:</span>
+        <ul>
+            <li th:each="i : ${#numbers.sequence(1, model.totalPages)}">
+                <a th:href="@{/products(page=${i}, size=${form.size}, searchWord=${form.searchWord})}" th:text="${i}"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

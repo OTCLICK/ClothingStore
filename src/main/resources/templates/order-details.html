@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${model.orderViewModel.base.pageTitle}">Детали заказа</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #35424a;
+        }
+
+        .btn-back {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${model.orderViewModel.base.pageTitle}">Детали заказа</h1>
+    <p><strong>Дата заказа:</strong> <span th:text="${#dates.format(model.orderViewModel.date, 'dd/MM/yyyy')}">01/01/2023</span></p>
+    <p><strong>Сумма заказа:</strong> <span th:text="${model.orderViewModel.amount}">0.00</span> руб.</p>
+    <p><strong>Статус:</strong> <span th:text="${model.orderViewModel.status}">Статус</span></p>
+    <p><strong>Количество товаров:</strong> <span th:text="${model.orderViewModel.quantityOfProducts}">0</span></p>
+    <p><strong>Пользователь:</strong> <span th:text="${model.user}">Пользователь</span></p>
+
+    <!-- Условное отображение скидочного купона -->
+    <p><strong>Скидочный купон:</strong>
+        <span th:if="${model.discountCoupon != null}" th:text="${model.discountCoupon}">0</span>
+        <span th:if="${model.discountCoupon == null}">Нет</span>
+    </p>
+
+    <a th:href="@{/orders}" class="btn btn-primary btn-back">Назад к списку заказов</a>
+</div>
+</body>
+</html>

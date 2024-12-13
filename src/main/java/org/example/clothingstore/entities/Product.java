@@ -12,9 +12,9 @@ public class Product extends BaseEntity {
     private String productName;
     private String color;
     private String size;
-    private String price;
+    private float price;
 
-    public Product(ClothingCategory clothingCategory, Brand brand, String productName, String color, String size, String price) {
+    public Product(ClothingCategory clothingCategory, Brand brand, String productName, String color, String size, float price) {
         setClothingCategory(clothingCategory);
         setBrand(brand);
         setProductName(productName);
@@ -73,11 +73,11 @@ public class Product extends BaseEntity {
     }
 
     @Column(name = "price", nullable = false)
-    public String getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 }

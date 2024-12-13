@@ -25,4 +25,11 @@ public class BrandRepositoryImpl extends BaseCRRepository<Brand> implements Bran
         return em.createQuery("SELECT b FROM Brand b WHERE b.brandName = :brandName", Brand.class).
                 setParameter("brandName", brandName).getSingleResult();
     }
+
+    @Override
+    public void saveAll(List<Brand> brands) {
+        for (Brand brand : brands) {
+            em.persist(brand);
+        }
+    }
 }

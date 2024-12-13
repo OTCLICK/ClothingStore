@@ -12,5 +12,6 @@ public interface ClothingCategoryRepository {
 //    ClothingCategory findById(Class<ClothingCategory> clothingCategoryClass, int id);
     List<ClothingCategory> findAll();
     ClothingCategory findByCategoryName(String categoryName);
+    void saveAll(List<ClothingCategory> clothingCategories);
 
 }

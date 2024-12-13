@@ -29,4 +29,11 @@ public class ClothingCategoryRepositoryImpl extends BaseCRRepository<ClothingCat
         return em.createQuery("SELECT cc FROM ClothingCategory cc WHERE cc.categoryName = :categoryName",
                         ClothingCategory.class).setParameter("categoryName", categoryName).getSingleResult();
     }
+
+    @Override
+    public void saveAll(List<ClothingCategory> clothingCategories) {
+        for (ClothingCategory cc : clothingCategories) {
+            em.persist(cc);
+        }
+    }
 }

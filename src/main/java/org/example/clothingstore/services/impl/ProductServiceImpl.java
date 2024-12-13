@@ -1,14 +1,24 @@
 package org.example.clothingstore.services.impl;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import org.example.clothingstore.dto.ProductDTO;
+import org.example.clothingstore.dto.ProductEditDTO;
+import org.example.clothingstore.entities.Brand;
+import org.example.clothingstore.entities.ClothingCategory;
 import org.example.clothingstore.entities.Product;
+import org.example.clothingstore.entities.SeasonEnum;
 import org.example.clothingstore.repositories.ProductRepository;
 import org.example.clothingstore.services.BrandService;
 import org.example.clothingstore.services.ClothingCategoryService;
 import org.example.clothingstore.services.ProductService;
 import org.example.clothingstore.utils.ValidationUtil;
+import org.example.clothingstorecontracts.viewmodel.ProductViewModel;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,12 +55,77 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findAll() {
-        return this.productRepository.findAll();
-    }
-
-    @Override
     public Product findByProductName(String productName) {
         return this.productRepository.findByProductName(productName);
     }
+
+    @Override
+    public Page<ProductDTO> getProducts(String searchWord, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Product> productsPage = searchWord != null
+                ? productRepository.findByProductNameContainingIgnoreCase(searchWord, pageable)
+                : productRepository.findAll(pageable);
+
+        var result = productsPage.map(p -> new ProductDTO(p.getId(), p.getClothingCategory(), p.getBrand(), p.getProductName(),
+                p.getColor(), p.getSize(), p.getPrice()));
+
+        result.forEach(p -> System.out.println(p.getId()));
+
+        return result;
+    }
+
+    @Override
+    public String createProduct(String categoryName, String brandName, String name, String color,
+                                String size, float price) {
+        Product newProduct = new Product(clothingCategoryService.findByCategoryName(categoryName),
+                brandService.findByBrandName(brandName), name, color, size, price);
+        productRepository.save(newProduct);
+        return newProduct.getId();
+    }
+
+    @Override
+    public ProductDTO getProduct(String id) {
+        try {
+            var product = productRepository.findById(id);
+            return new ProductDTO(product.getId(), product.getClothingCategory(), product.getBrand(), product.getProductName(),
+                    product.getColor(), product.getSize(), product.getPrice());
+        }
+        catch (RuntimeException e) {
+            System.out.println("Товар не найден");
+            return null;
+        }
+    }
+
+    @Override
+    public ProductEditDTO getProductEdit(String id) {
+        var product = productRepository.findById(id);
+        return new ProductEditDTO(product.getId(), product.getPrice(), product.getProductName(),
+                product.getClothingCategory().getCategoryName(),
+                product.getBrand().getBrandName(), product.getColor(), product.getSize(),
+                String.valueOf(product.getClothingCategory().getSeason()));
+    }
+
+    @Override
+    public void deleteProduct(String id) {
+        productRepository.deleteById(id);
+    }
+
+    @Transactional
+    @Override
+    public void updateProduct(ProductEditDTO productEditDto) {
+        try {
+            var product = productRepository.findById(productEditDto.id());
+            product.setClothingCategory(clothingCategoryService.findByCategoryName(productEditDto.categoryName()));
+            product.setBrand(brandService.findByBrandName(productEditDto.brandName()));
+            product.setProductName(productEditDto.productName());
+            product.setColor(productEditDto.color());
+            product.setSize(productEditDto.size());
+            product.setPrice(productEditDto.price());
+            productRepository.save(product);
+        }
+        catch (RuntimeException e) {
+            System.out.println("Товар не найден");
+        }
+    }
+
 }

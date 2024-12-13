@@ -5,22 +5,32 @@ import org.example.clothingstore.entities.ClothingCategory;
 
 public class ProductDTO {
 
+    String id;
     private ClothingCategory clothingCategory;
     private Brand brand;
     private String productName;
     private String color;
     private String size;
-    private String price;
+    private float price;
 
-    public ProductDTO() {}
+    protected ProductDTO() {}
 
-    public ProductDTO(ClothingCategory clothingCategory, Brand brand, String productName, String color, String size, String price) {
+    public ProductDTO(String id, ClothingCategory clothingCategory, Brand brand, String productName, String color, String size, float price) {
+        setId(id);
         setClothingCategory(clothingCategory);
         setBrand(brand);
         setProductName(productName);
         setColor(color);
         setSize(size);
         setPrice(price);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public ClothingCategory getClothingCategory() {
@@ -63,11 +73,11 @@ public class ProductDTO {
         this.size = size;
     }
 
-    public String getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 }

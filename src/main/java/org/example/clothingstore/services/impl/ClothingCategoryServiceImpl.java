@@ -52,6 +52,6 @@ public class ClothingCategoryServiceImpl implements ClothingCategoryService {
 
     @Override
     public ClothingCategory findByCategoryName(String categoryName) {
-        return this.clothingCategoryRepository.findByCategoryName(categoryName);
+        return clothingCategoryRepository.findByCategoryName(categoryName);
     }
 }

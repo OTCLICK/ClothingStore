@@ -11,5 +11,6 @@ public interface BrandRepository {
     void save(Brand brand);
 //    Brand findById(Class<Brand> brandClass, int id);
     Brand findByBrandName(String brandName);
+    void saveAll(List<Brand> brands);
 
 }

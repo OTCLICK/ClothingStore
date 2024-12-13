@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${model.base.pageTitle}">Редактирование товара</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${model.base.pageTitle}">Редактирование товара</h1>
+    <p th:text="'Текущий пользователь: ' + ${model.base.currentUser}"></p>
+
+    <form th:action="@{/admin/products/{productId}/edit(id=${form.id})}" th:object="${form}" method="post">
+
+        <div class="form-group">
+            <label for="price">Цена:</label>
+            <input type="number" id="price" th:field="*{price}" class="form-control" placeholder="Введите цену" min="10"  />
+            <div th:if="${#fields.hasErrors('price')}" class="error">
+                <p th:errors="*{price}">Ошибка в цене</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="productName">Название товара:</label>
+            <input type="text" id="productName" th:field="*{productName}" class="form-control" placeholder="Введите название товара"  />
+            <div th:if="${#fields.hasErrors('productName')}" class="error">
+                <p th:errors="*{productName}">Ошибка в названии продукта</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="categoryName">Название категории:</label>
+            <input type="text" id="categoryName" th:field="*{categoryName}" class="form-control" placeholder="Введите название категории"  />
+            <div th:if="${#fields.hasErrors('categoryName')}" class="error">
+                <p th:errors="*{categoryName}">Ошибка в категории</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="brandName">Название бренда:</label>
+            <input type="text" id="brandName" th:field="*{brandName}" class="form-control" placeholder="Введите название бренда"  />
+            <div th:if="${#fields.hasErrors('brandName')}" class="error">
+                <p th:errors="*{brandName}">Ошибка в бренде</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="color">Цвет товара:</label>
+            <input type="text" id="color" th:field="*{color}" class="form-control" placeholder="Введите цвет товара"  />
+            <div th:if="${#fields.hasErrors('color')}" class="error">
+                <p th:errors="*{color}">Ошибка в цвете продукта</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="size">Размер:</label>
+            <select id="size" th:field="*{size}" class="form-control" >
+                <option value="" disabled selected>Выберите размер</option>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XXL">XXL</option>
+                <option value="XXXL">XXXL</option>
+            </select>
+            <div th:if="${#fields.hasErrors('size')}" class="error">
+                <p th:errors="*{size}">Ошибка в размере</p>
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        <a href="/products" class="btn btn-secondary">Назад</a>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

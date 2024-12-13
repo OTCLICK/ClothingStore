@@ -8,6 +8,7 @@ import java.util.Date;
 
 public class OrderDTO {
 
+    String id;
     private User user;
     private DiscountCoupon discountCoupon;
     private Date date;
@@ -17,13 +18,22 @@ public class OrderDTO {
 
     public OrderDTO() {}
 
-    public OrderDTO(User user, DiscountCoupon discountCoupon, Date date, float orderAmount, OrderStatusEnum orderStatus, int quantityOfProducts) {
+    public OrderDTO(String id, User user, DiscountCoupon discountCoupon, Date date, float orderAmount, OrderStatusEnum orderStatus, int quantityOfProducts) {
+        setId(id);
         setUser(user);
         setDiscountCoupon(discountCoupon);
         setDate(date);
         setOrderAmount(orderAmount);
         setOrderStatus(orderStatus);
         setQuantityOfProducts(quantityOfProducts);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public User getUser() {

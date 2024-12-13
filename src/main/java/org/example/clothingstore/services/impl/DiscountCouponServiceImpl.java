@@ -2,13 +2,16 @@ package org.example.clothingstore.services.impl;
 
 import jakarta.validation.ConstraintViolation;
 import org.example.clothingstore.dto.DiscountCouponDTO;
-import org.example.clothingstore.entities.DiscountCoupon;
+import org.example.clothingstore.entities.*;
 import org.example.clothingstore.repositories.DiscountCouponRepository;
 import org.example.clothingstore.services.BrandService;
 import org.example.clothingstore.services.ClothingCategoryService;
 import org.example.clothingstore.services.DiscountCouponService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,12 +48,40 @@ public class DiscountCouponServiceImpl implements DiscountCouponService {
     }
 
     @Override
-    public DiscountCoupon findById(int id) {
+    public DiscountCoupon findById(String id) {
         return this.discountCouponRepository.findById(id);
     }
 
     @Override
-    public List<DiscountCoupon> findByDiscountPercentage(float discountPercentage) {
+    public List<DiscountCoupon> findListByDiscountPercentage(float discountPercentage) {
+        return this.discountCouponRepository.findListByDiscountPercentage(discountPercentage);
+    }
+
+    @Override
+    public Page<DiscountCouponDTO> getDiscountCoupons(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<DiscountCoupon> couponsPage = discountCouponRepository.findAll(pageable);
+        return couponsPage.map(dc -> new DiscountCouponDTO(dc.getId(), dc.getClothingCategory(), dc.getBrand(),
+                dc.getDiscountPercentage(), dc.getMinOrderAmount()));
+    }
+
+    @Override
+    public String createDiscountCoupon(String categoryName, String brandName,
+                                       float discountPercentage, float minOrderAmount) {
+            DiscountCoupon newCoupon = new DiscountCoupon(clothingCategoryService.findByCategoryName(categoryName),
+                    brandService.findByBrandName(brandName), discountPercentage, minOrderAmount);
+            discountCouponRepository.save(newCoupon);
+            return newCoupon.getId();
+    }
+
+    @Override
+    public void deleteDiscountCoupon(String id) {
+        discountCouponRepository.deleteById(id);
+    }
+
+    @Override
+    public DiscountCoupon findByDiscountPercentage(float discountPercentage) {
         return this.discountCouponRepository.findByDiscountPercentage(discountPercentage);
     }
 }
+
