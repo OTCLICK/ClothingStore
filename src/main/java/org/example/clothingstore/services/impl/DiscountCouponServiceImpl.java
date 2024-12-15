@@ -2,6 +2,7 @@ package org.example.clothingstore.services.impl;
 
 import jakarta.validation.ConstraintViolation;
 import org.example.clothingstore.dto.DiscountCouponDTO;
+import org.example.clothingstore.dto.OrderDTO;
 import org.example.clothingstore.entities.*;
 import org.example.clothingstore.repositories.DiscountCouponRepository;
 import org.example.clothingstore.services.BrandService;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -83,5 +85,28 @@ public class DiscountCouponServiceImpl implements DiscountCouponService {
     public DiscountCoupon findByDiscountPercentage(float discountPercentage) {
         return this.discountCouponRepository.findByDiscountPercentage(discountPercentage);
     }
+
+    @Override
+    public List<DiscountCouponDTO> getAvailableCouponsForOrder(Order order) {
+        List<DiscountCoupon> allCoupons = discountCouponRepository.findAllCoupons();
+        List<DiscountCouponDTO> availableCoupons = new ArrayList<>();
+
+        for (DiscountCoupon coupon : allCoupons) {
+            boolean isValid = true;
+            for (Product product : order.getProducts()) {
+                if (!product.getClothingCategory().equals(coupon.getClothingCategory()) &&
+                        !product.getBrand().equals(coupon.getBrand())) {
+                    isValid = false;
+                    break;
+                }
+            }
+            if (isValid) {
+                availableCoupons.add(new DiscountCouponDTO(coupon.getId(), coupon.getClothingCategory(), coupon.getBrand(), coupon.getDiscountPercentage(), coupon.getMinOrderAmount()));
+            }
+        }
+
+        return availableCoupons;
+    }
+
 }
 

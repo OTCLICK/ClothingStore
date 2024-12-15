@@ -58,6 +58,8 @@ public class DiscountCouponRepositoryImpl extends BaseCRURepository<DiscountCoup
         em.remove(em.find(DiscountCoupon.class, id));
     }
 
+
+
     @Override
     public List<DiscountCoupon> getAllDiscountCoupons() {
         return em.createQuery("SELECT dc FROM DiscountCoupon dc", DiscountCoupon.class).getResultList();
@@ -68,5 +70,10 @@ public class DiscountCouponRepositoryImpl extends BaseCRURepository<DiscountCoup
         return em.createQuery("SELECT dc FROM DiscountCoupon dc WHERE dc.discountPercentage = :discountPercentage",
                         DiscountCoupon.class).
                 setParameter("discountPercentage", discountPercentage).getSingleResult();
+    }
+
+    @Override
+    public List<DiscountCoupon> findAllCoupons() {
+        return em.createQuery("SELECT dc FROM DiscountCoupon dc", DiscountCoupon.class).getResultList();
     }
 }

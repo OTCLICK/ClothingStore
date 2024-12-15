@@ -46,6 +46,24 @@
         <span th:if="${model.discountCoupon != null}" th:text="${model.discountCoupon}">0</span>
         <span th:if="${model.discountCoupon == null}">Нет</span>
     </p>
+    <form th:action="@{/orders/add-coupon(orderId=${model.orderViewModel.id})}" method="post">
+        <div class="form-group">
+            <label for="couponSelect">Выберите купон:</label>
+            <select class="form-control" id="couponSelect" name="couponId" required>
+                <option value="" disabled selected>Выберите купон</option>
+                <option th:each="coupon : ${model.availableCoupons}"
+                        th:value="${coupon.couponId}"
+                        th:text="${coupon.brand.getBrandName()} + ' - ' + ${coupon.discountPercentage} + '%'"
+                ></option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить купон</button>
+    </form>
+
+
+    <form th:action="@{/orders/pay(orderId=${model.orderViewModel.id})}" method="post">
+        <button type="submit" class="btn btn-primary">Оплатить заказ</button>
+    </form>
 
     <a th:href="@{/orders}" class="btn btn-primary btn-back">Назад к списку заказов</a>
 </div>

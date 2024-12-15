@@ -1,5 +1,9 @@
 package org.example.clothingstore.controllers;
 
+import org.example.clothingstore.dto.OrderDTO;
+import org.example.clothingstore.entities.Order;
+import org.example.clothingstore.entities.OrderStatusEnum;
+import org.example.clothingstore.services.OrderService;
 import org.example.clothingstore.services.ProductService;
 import org.example.clothingstorecontracts.controllers.ProductController;
 import org.example.clothingstorecontracts.input.ProductSearchForm;
@@ -9,15 +13,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/products")
 public class ProductControllerImpl implements ProductController {
 
     private final ProductService productService;
+    private final OrderService orderService;
 
     @Autowired
-    public ProductControllerImpl(ProductService productService) {
+    public ProductControllerImpl(ProductService productService, OrderService orderService) {
         this.productService = productService;
+        this.orderService = orderService;
     }
 
     public BaseViewModel createBaseViewModel(String title, String user) {
@@ -74,5 +83,30 @@ public class ProductControllerImpl implements ProductController {
         model.addAttribute("model", viewModel);
         return "show-product";
     }
+
+    @GetMapping("/select")
+    public String selectOrder(@RequestParam String productId, Model model) {
+        System.out.println("Полученный productId: " + productId);
+
+        List<OrderDTO> orders = orderService.getOrdersByStatus(OrderStatusEnum.NOT_PAID)
+                .stream()
+                .map(order -> new OrderDTO(
+                        order.getId(),
+                        order.getUser (),
+                        order.getDiscountCoupon(),
+                        order.getDate(),
+                        order.getOrderAmount(),
+                        order.getOrderStatus(),
+                        order.getQuantityOfProducts()))
+                .collect(Collectors.toList());
+
+        System.out.println("Количество заказов: " + orders.size());
+
+
+        model.addAttribute("orders", orders);
+        model.addAttribute("productId", productId);
+        return "select-order";
+    }
+
 
 }

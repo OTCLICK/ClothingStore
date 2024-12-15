@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль пользователя</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <h1>Профиль пользователя</h1>
+    <div class="profile-info">
+        <p><strong>Имя пользователя:</strong> <span th:text="${user.username}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+        <p><strong>Телефон:</strong> <span th:text="${user.phone}"></span></p>
+    </div>
+    <a th:href="@{/users/logout}" class="logout">Выйти</a>
+</div>
+</body>
+</html>

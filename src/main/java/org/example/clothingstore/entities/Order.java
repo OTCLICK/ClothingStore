@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 
 import java.util.Date;
 
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 @Entity
 @Table(name = "orders")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -16,9 +21,11 @@ public class Order extends BaseEntity {
     private OrderStatusEnum orderStatus;
     private int quantityOfProducts;
 
+    private List<Product> products = new ArrayList<>();
+
     public Order(User user, DiscountCoupon discountCoupon, Date date, float orderAmount, OrderStatusEnum orderStatus,
                  int quantityOfProducts) {
-        setUser(user);
+        setUser (user);
         setDiscountCoupon(discountCoupon);
         setDate(date);
         setOrderAmount(orderAmount);
@@ -26,15 +33,26 @@ public class Order extends BaseEntity {
         setQuantityOfProducts(quantityOfProducts);
     }
 
+    public Order(String id, User user, DiscountCoupon discountCoupon, Date date, float orderAmount, OrderStatusEnum orderStatus,
+                 int quantityOfProducts) {
+        setId(id);
+        this.user = user;
+        this.discountCoupon = discountCoupon;
+        this.date = date;
+        this.orderAmount = orderAmount;
+        this.orderStatus = orderStatus;
+        this.quantityOfProducts = quantityOfProducts;
+    }
+
     protected Order() {}
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    public User getUser() {
+    public User getUser () {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser (User user) {
         this.user = user;
     }
 
@@ -83,4 +101,27 @@ public class Order extends BaseEntity {
     public void setQuantityOfProducts(int quantityOfProducts) {
         this.quantityOfProducts = quantityOfProducts;
     }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "order_products",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public void addProduct(Product product) {
+        this.products.add(product);
+    }
+
+    public void removeProduct(Product product) {
+        this.products.remove(product);
+    }
 }
+

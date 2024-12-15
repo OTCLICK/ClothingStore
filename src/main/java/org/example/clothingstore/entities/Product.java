@@ -23,6 +23,16 @@ public class Product extends BaseEntity {
         setPrice(price);
     }
 
+    public Product(String id, ClothingCategory clothingCategory, Brand brand, String productName, String color, String size, float price) {
+        setId(id);
+        this.clothingCategory = clothingCategory;
+        this.brand = brand;
+        this.productName = productName;
+        this.color = color;
+        this.size = size;
+        this.price = price;
+    }
+
     protected Product() {}
 
     @ManyToOne(fetch = FetchType.LAZY)

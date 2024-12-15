@@ -2,8 +2,10 @@ package org.example.clothingstore.services.impl;
 
 import jakarta.validation.ConstraintViolation;
 import org.example.clothingstore.dto.OrderDTO;
+import org.example.clothingstore.dto.ProductDTO;
 import org.example.clothingstore.entities.Order;
 import org.example.clothingstore.entities.OrderStatusEnum;
+import org.example.clothingstore.entities.Product;
 import org.example.clothingstore.entities.User;
 import org.example.clothingstore.repositories.OrderRepository;
 import org.example.clothingstore.services.DiscountCouponService;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -63,8 +66,7 @@ public class OrderServiceImpl implements OrderService {
             var order = orderRepository.findById(id);
             return new OrderDTO(order.getId(), order.getUser(), order.getDiscountCoupon(), order.getDate(),
                     order.getOrderAmount(), order.getOrderStatus(), order.getQuantityOfProducts());
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             System.out.println("Заказ не найден");
             return null;
         }
@@ -80,4 +82,21 @@ public class OrderServiceImpl implements OrderService {
         return newOrder.getId();
     }
 
+    @Override
+    public List<Order> getOrdersByStatus(OrderStatusEnum status) {
+        return orderRepository.findByStatus(status);
+    }
+
+    @Override
+    public Order getOrderById(String id) {
+        return orderRepository.findById(id);
+    }
+
+    @Override
+    public void save(Order order) {
+        orderRepository.save(order);
+    }
 }
+
+
+

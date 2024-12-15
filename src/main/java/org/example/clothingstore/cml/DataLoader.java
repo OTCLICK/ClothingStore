@@ -23,17 +23,19 @@
 //    private final DiscountCouponRepository discountCouponRepository;
 //    private final UserRepository userRepository;
 //    private final OrderRepository orderRepository;
+//    private final UserRolesRepository rolesRepository;
 //
 //    @Autowired
 //    public DataLoader(ClothingCategoryRepository clothingCategoryRepository, BrandRepository brandRepository,
 //                      ProductRepository productRepository, DiscountCouponRepository discountCouponRepository,
-//                      UserRepository userRepository, OrderRepository orderRepository) {
+//                      UserRepository userRepository, OrderRepository orderRepository, UserRolesRepository rolesRepository) {
 //        this.clothingCategoryRepository = clothingCategoryRepository;
 //        this.brandRepository = brandRepository;
 //        this.productRepository = productRepository;
 //        this.discountCouponRepository = discountCouponRepository;
 //        this.userRepository = userRepository;
 //        this.orderRepository = orderRepository;
+//        this.rolesRepository = rolesRepository;
 //    }
 //
 //    @Override
@@ -70,7 +72,7 @@
 //        productRepository.saveAll(products);
 //
 //        List<DiscountCoupon> discountCoupons = new ArrayList<>();
-//        for (int i = 0; i < 20; i++) {
+//        for (int i = 0; i < 80; i++) {
 //            ClothingCategory category = categories.get(random.nextInt(categories.size()));
 //            Brand brand = brands.get(random.nextInt(brands.size()));
 //            float discountPercentage = random.nextFloat() * 100; // Скидка от 0 до 100%
@@ -79,42 +81,37 @@
 //        }
 //        discountCouponRepository.saveAll(discountCoupons);
 //
-//        List<User> users = new ArrayList<>();
-//        for (int i = 0; i < 20; i++) {
-//            String username = faker.name().username();
-//            String login = faker.name().firstName();
-//            String password = faker.internet().password();
-//            String email = faker.internet().emailAddress();
-//            String phone = faker.phoneNumber().phoneNumber();
-//            users.add(new User(username, login, password, email, phone));
+//        if (rolesRepository.count() == 0) {
+//            var customerRole = new Role(UserRolesEnum.CUSTOMER);
+//            var adminRole = new Role(UserRolesEnum.ADMIN);
+//            rolesRepository.save(customerRole);
+//            rolesRepository.save(adminRole);
 //        }
-//        userRepository.saveAll(users);
+//
+//        var customerRole = rolesRepository.findRoleByName(UserRolesEnum.CUSTOMER).orElseThrow();
+//        var customerUser = new User("customer", "customer", "customer123",
+//                "ivan.budko.04@mail.ru", "89201234567");
+//        customerUser.setRoles(List.of(customerRole));
+//        userRepository.save(customerUser);
 //
 //        List<DiscountCoupon> availableCoupons = discountCouponRepository.getAllDiscountCoupons();
+//        List<User> users = userRepository.findAll(); // Получаем всех пользователей для генерации заказов
 //
-//        // Генерация заказов
-//        List<Order> orders = new ArrayList<>();
-//        for (int i = 0; i < 50; i++) {
-//            User user = users.get(random.nextInt(users.size()));
-//            DiscountCoupon discountCoupon = null;
-//
-//            // Используем купон, если доступные купоны есть
-//            if (!availableCoupons.isEmpty() && random.nextBoolean()) {
-//                // Выбор случайного купона
-//                int couponIndex = random.nextInt(availableCoupons.size());
-//                discountCoupon = availableCoupons.get(couponIndex);
-//                // Удаляем купон из списка доступных, чтобы избежать повторного использования
-//                availableCoupons.remove(couponIndex);
-//            }
-//
-//            Date date = faker.date().past(30, TimeUnit.DAYS); // Дата заказа в прошлом
-//            float orderAmount = Float.parseFloat(faker.commerce().price().replace("$", "").replace(",", ""));
-//            OrderStatusEnum orderStatus = random.nextBoolean() ? OrderStatusEnum.PAID : OrderStatusEnum.NOT_PAID;
-//            int quantityOfProducts = random.nextInt(5) + 1; // Случайное количество товаров от 1 до 5
-//
-//            orders.add(new Order(user, discountCoupon, date, orderAmount, orderStatus, quantityOfProducts));
-//        }
-//        orderRepository.saveAll(orders);
+////        List<Order> orders = new ArrayList<>();
+////        for (int i = 0; i < 25; i++) {
+////            System.out.println(users.size() + " AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+////            User user = users.get(random.nextInt(users.size())); // Случайный пользователь
+////            DiscountCoupon discountCoupon = availableCoupons.isEmpty() ? null : availableCoupons.get(random.nextInt(availableCoupons.size()));
+////            availableCoupons.remove(discountCoupon);
+////            Date orderDate = faker.date().past(30, TimeUnit.DAYS); // Случайная дата в пределах последних 30 дней
+////            float orderAmount = Float.parseFloat(faker.commerce().price().replace("$", "").replace(",", ""));
+////            OrderStatusEnum orderStatus = OrderStatusEnum.values()[random.nextInt(OrderStatusEnum.values().length)]; // Случайный статус заказа
+////            int quantityOfProducts = 0;
+////
+////            orders.add(new Order(user, discountCoupon, orderDate, orderAmount, orderStatus, quantityOfProducts));
+////        }
+////        orderRepository.saveAll(orders);
+//    }
 //    }
 //
-//}
+//

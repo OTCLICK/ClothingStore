@@ -18,6 +18,7 @@ public interface DiscountCouponRepository {
     List<DiscountCoupon> getAllDiscountCoupons();
     void saveAll(List<DiscountCoupon> discountCoupons);
     void deleteById(String id);
+    List<DiscountCoupon> findAllCoupons();
 
 
 }

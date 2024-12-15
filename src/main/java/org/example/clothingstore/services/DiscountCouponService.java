@@ -1,6 +1,7 @@
 package org.example.clothingstore.services;
 
 import org.example.clothingstore.dto.DiscountCouponDTO;
+import org.example.clothingstore.dto.OrderDTO;
 import org.example.clothingstore.entities.*;
 import org.springframework.data.domain.Page;
 
@@ -16,5 +17,7 @@ public interface DiscountCouponService {
     String createDiscountCoupon(String categoryName, String brandName,
                                 float discountPercentage, float minOrderAmount);
     void deleteDiscountCoupon(String id);
+    public List<DiscountCouponDTO> getAvailableCouponsForOrder(Order order);
+
 
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Выбор заказа</title>
+    <link rel="stylesheet" href="..."> <!-- Подключите ваши стили -->
+</head>
+<body>
+<div class="container">
+    <h1>Выберите заказ для добавления товара</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Сумма заказа</th>
+            <th>Статус</th>
+            <th>Количество товаров</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${#dates.format(order.date, 'dd/MM/yyyy')}">01/01/2023</td>
+            <td th:text="${order.orderAmount}">0.00</td>
+            <td th:text="${order.orderStatus}">Статус</td>
+            <td th:text="${order.quantityOfProducts}">0</td>
+            <td>
+                <form th:action="@{/orders/add-product}" method="post">
+                    <input type="hidden" name="orderId" th:value="${order.id}"/>
+                    <input type="hidden" name="productId" th:value="${productId}"/> <!-- Передаем productId -->
+                    <button type="submit" class="btn btn-success">Добавить в заказ</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+    <a href="/products" class="btn">Назад к списку товаров</a>
+</div>
+</body>
+</html>
