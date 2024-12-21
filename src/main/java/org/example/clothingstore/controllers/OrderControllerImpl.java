@@ -84,10 +84,9 @@ public class OrderControllerImpl implements OrderController {
     public String orderDetails(@PathVariable String orderId, Model model) {
         var order = orderService.getOrderById(orderId);
         if (order == null) {
-            return "redirect:/orders"; // Заказ не найден
+            return "redirect:/orders";
         }
 
-        // Получаем доступные купоны
         List<DiscountCouponDTO> availableCoupons = discountCouponService.getAvailableCouponsForOrder(order);
 
         Float discountCoupon = (order.getDiscountCoupon() != null) ? order.getDiscountCoupon().getDiscountPercentage() : null;
@@ -96,7 +95,7 @@ public class OrderControllerImpl implements OrderController {
                 new OrderViewModel(orderId,
                         createBaseViewModel("Детали заказа", "Текущий пользователь"), order.getDate(),
                         order.getOrderAmount(), String.valueOf(order.getOrderStatus()), order.getQuantityOfProducts()),
-                order.getUser ().getUsername(), discountCoupon, availableCoupons);
+                order.getUser().getUsername(), discountCoupon, availableCoupons);
 
         model.addAttribute("model", viewModel);
         return "order-details"; // Убедитесь, что это правильное имя шаблона
@@ -155,27 +154,32 @@ public class OrderControllerImpl implements OrderController {
     public String addProductToOrder(@RequestParam String orderId, @RequestParam String productId) {
         OrderDTO order = orderService.getOrder(orderId);
 
-        ProductDTO product = productService.getProduct(productId);
+        ProductDTO productDTO = productService.getProduct(productId);
+        if (productDTO == null) {
+            throw new IllegalArgumentException("Product not found with id: " + productId);
+        }
 
-//        order.setOrderAmount(order.getOrderAmount() + product.getPrice());
-//        order.setQuantityOfProducts(order.getQuantityOfProducts() + 1);
-        float newOrderAmount = order.getOrderAmount() + product.getPrice();
+        float newOrderAmount = order.getOrderAmount() + productDTO.getPrice();
         int newQuantityOfProducts = order.getQuantityOfProducts() + 1;
-        var trueOrder = orderRepository.findById(orderId);
+
+        Order trueOrder = orderRepository.findById(orderId);
+        if (trueOrder == null) {
+            throw new IllegalArgumentException("Order not found with id: " + orderId);
+        }
+
         trueOrder.setOrderAmount(newOrderAmount);
         trueOrder.setQuantityOfProducts(newQuantityOfProducts);
 
-        Product productEntity = productService.getProductById(productId);
-        if (productEntity != null) {
-            trueOrder.getProducts().add(productEntity);
-        }
+        Product productEntity = new Product(productDTO.getId(), productDTO.getClothingCategory(), productDTO.getBrand(),
+                productDTO.getProductName(), productDTO.getColor(), productDTO.getSize(), productDTO.getPrice());
 
+        trueOrder.getProducts().add(productEntity);
         orderRepository.save(trueOrder);
-
-//        productService.deleteProduct(productId);
 
         return "redirect:/orders";
     }
+
+
 
     @PostMapping("/pay")
     public String payOrder(@RequestParam String orderId) {

@@ -19,6 +19,8 @@ public interface DiscountCouponRepository {
     void saveAll(List<DiscountCoupon> discountCoupons);
     void deleteById(String id);
     List<DiscountCoupon> findAllCoupons();
+    List<DiscountCoupon> findTopBrands(int limit);
+    List<DiscountCoupon> findTopCategories(int limit);
 
 
 }

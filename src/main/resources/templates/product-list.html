@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -159,7 +159,7 @@
                 <a class="nav-link" href="/coupons">Купоны</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/">Профиль</a>
+                <a class="nav-link" href="/users/profile">Профиль</a>
             </li>
         </ul>
     </div>
@@ -167,10 +167,12 @@
 
 <div class="container">
     <h1 th:text="${model.base.pageTitle}">Список товаров</h1>
-    <p>Пользователь: <span th:text="${model.base.currentUser  }">Текущий пользователь</span></p>
 
     <form action="#" th:action="@{/products}" method="get">
-        <button type="button" onclick="location.href='/admin/products/create-product'" class="btn btn-secondary">Создать товар</button>
+        <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <button type="button" onclick="location.href='/admin/products/create-product'" class="btn btn-secondary">Создать товар</button>
+        </div>
+
         <input type="text" name="searchWord" th:value="${form.searchWord}" placeholder="Поиск по названию продукта" />
         <input type="number" name="page" th:value="${form.page}" min="1" placeholder="Страница" />
         <input type="number" name="size" th:value="${form.size}" min="1" placeholder="Размер страницы" />
@@ -182,7 +184,9 @@
         <tr>
             <th>Название продукта</th>
             <th>Цена</th>
-            <th>Действия</th> <!-- Заголовок для действий -->
+            <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <th>Действия</th>
+            </div>
         </tr>
         </thead>
         <tbody>
@@ -191,10 +195,12 @@
                 <a th:href="@{/products/{id}(id=${product.id})}" th:text="${product.name()}">Имя продукта</a>
             </td>
             <td th:text="${product.price}">Цена</td>
+            <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
             <td>
                 <a th:href="@{/admin/products/{id}/edit(id=${product.id})}" class="btn btn-primary">Редактировать</a>
                 <a th:href="@{/admin/products/{id}/delete(id=${product.id})}" class="btn btn-second">Удалить</a>
             </td>
+            </div>
         </tr>
         </tbody>
     </table>

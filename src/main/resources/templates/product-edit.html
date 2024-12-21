@@ -28,7 +28,7 @@
 <body>
 <div class="container">
     <h1 th:text="${model.base.pageTitle}">Редактирование товара</h1>
-    <p th:text="'Текущий пользователь: ' + ${model.base.currentUser}"></p>
+<!--    <p th:text="'Текущий пользователь: ' + ${model.base.currentUser}"></p>-->
 
     <form th:action="@{/admin/products/{productId}/edit(id=${form.id})}" th:object="${form}" method="post">
 

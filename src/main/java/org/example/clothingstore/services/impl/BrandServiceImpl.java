@@ -8,9 +8,13 @@ import org.example.clothingstore.services.BrandService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 @Service
+@EnableCaching
 public class BrandServiceImpl implements BrandService {
 
     private final BrandRepository brandRepository;
@@ -25,6 +29,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "brands", allEntries = true)
     public void addBrand(String brandName) {
         BrandDTO brandDTO = new BrandDTO();
         brandDTO.setBrandName(brandName);
@@ -42,6 +47,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @Cacheable("brands")
     public Brand findByBrandName(String brandName) {
         return this.brandRepository.findByBrandName(brandName);
     }

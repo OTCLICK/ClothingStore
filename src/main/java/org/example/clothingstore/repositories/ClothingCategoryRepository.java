@@ -13,5 +13,6 @@ public interface ClothingCategoryRepository {
     List<ClothingCategory> findAll();
     ClothingCategory findByCategoryName(String categoryName);
     void saveAll(List<ClothingCategory> clothingCategories);
+    ClothingCategory findById(String id);
 
 }

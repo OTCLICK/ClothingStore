@@ -32,4 +32,9 @@ public class BrandRepositoryImpl extends BaseCRRepository<Brand> implements Bran
             em.persist(brand);
         }
     }
+
+    @Override
+    public Brand findById(String id) {
+        return em.find(Brand.class, id);
+    }
 }

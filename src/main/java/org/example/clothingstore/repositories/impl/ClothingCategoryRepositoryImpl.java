@@ -36,4 +36,9 @@ public class ClothingCategoryRepositoryImpl extends BaseCRRepository<ClothingCat
             em.persist(cc);
         }
     }
+
+    @Override
+    public ClothingCategory findById(String id) {
+        return em.find(ClothingCategory.class, id);
+    }
 }

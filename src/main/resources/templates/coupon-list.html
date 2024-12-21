@@ -76,17 +76,17 @@
         }
         .btn {
             padding: 10px 15px;
-            background-color: #5cb85c; /* Зеленый цвет для кнопки */
+            background-color: #5cb85c;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-bottom: 20px; /* Отступ снизу для кнопки */
-            text-decoration: none; /* Убираем подчеркивание */
-            display: inline-block; /* Чтобы кнопка не была на одной строке с другим контентом */
+            margin-bottom: 20px;
+            text-decoration: none;
+            display: inline-block;
         }
         .btn:hover {
-            background-color: #4cae4c; /* Темно-зеленый при наведении */
+            background-color: #4cae4c;
         }
     </style>
 </head>
@@ -108,7 +108,7 @@
                 <a class="nav-link" href="/coupons">Купоны</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/">Профиль</a>
+                <a class="nav-link" href="/users/profile">Профиль</a>
             </li>
         </ul>
     </div>
@@ -116,10 +116,10 @@
 
 <div class="container">
     <h1 th:text="${model.base.pageTitle}">Список купонов</h1>
-    <p>Пользователь: <span th:text="${model.base.currentUser  }">Текущий пользователь</span></p>
-
-    <!-- Кнопка "Создать купон" -->
+<!--    <p>Пользователь: <span th:text="${model.base.currentUser  }">Текущий пользователь</span></p>-->
+    <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
     <a href="/admin/coupons/create-coupon" class="btn">Создать купон</a>
+    </div>
 
     <table>
         <thead>

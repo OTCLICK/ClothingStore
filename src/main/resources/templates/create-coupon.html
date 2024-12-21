@@ -28,12 +28,29 @@
 <body>
 <div class="container">
     <h1 th:text="${model.base.pageTitle}">Добавление купона</h1>
-    <p th:text="'Текущий пользователь: ' + ${model.base.currentUser }"></p>
+<!--    <p th:text="'Текущий пользователь: ' + ${model.base.currentUser }"></p>-->
 
     <form th:action="@{/admin/coupons/create-coupon}" th:object="${form}" method="post">
         <div class="form-group">
-            <label for="categoryName">Название категории одежды:</label>
-            <input type="text" id="categoryName" th:field="*{categoryName}" class="form-control" placeholder="Введите название категории" required />
+            <label for="categoryName">Название категории:</label>
+            <select id="categoryName" th:field="*{categoryName}" class="form-control" required>
+                <option value="" disabled selected>Выберите категорию</option>
+                <option value="T-shirt">T-shirt</option>
+                <option value="Jeans">Jeans</option>
+                <option value="Jacket">Jacket</option>
+                <option value="Dress">Dress</option>
+                <option value="Skirt">Skirt</option>
+                <option value="Shorts">Shorts</option>
+                <option value="Sweater">Sweater</option>
+                <option value="Suit">Suit</option>
+                <option value="Coat">Coat</option>
+                <option value="Activewear">Activewear</option>
+                <option value="Loungewear">Loungewear</option>
+                <option value="Pajamas">Pajamas</option>
+                <option value="Swimwear">Swimwear</option>
+                <option value="Footwear">Footwear</option>
+                <option value="Accessories">Accessories</option>
+            </select>
             <div th:if="${#fields.hasErrors('categoryName')}" class="error">
                 <p th:errors="*{categoryName}">Ошибка в категории</p>
             </div>
@@ -41,7 +58,25 @@
 
         <div class="form-group">
             <label for="brandName">Название бренда:</label>
-            <input type="text" id="brandName" th:field="*{brandName}" class="form-control" placeholder="Введите название бренда" required />
+            <select id="brandName" th:field="*{brandName}" class="form-control" required>
+                <option value="" disabled selected>Выберите бренд</option>
+                <option value="Nike">Nike</option>
+                <option value="Adidas">Adidas</option>
+                <option value="Puma">Puma</option>
+                <option value="Levi's">Levi's</option>
+                <option value="Zara">Zara</option>
+                <option value="H&M">H&M</option>
+                <option value="Uniqlo">Uniqlo</option>
+                <option value="Gucci">Gucci</option>
+                <option value="Prada">Prada</option>
+                <option value="Chanel">Chanel</option>
+                <option value="Under Armour">Under Armour</option>
+                <option value="Reebok">Reebok</option>
+                <option value="Lacoste">Lacoste</option>
+                <option value="Tommy Hilfiger">Tommy Hilfiger</option>
+                <option value="Calvin Klein">Calvin Klein</option>
+                <option value="Forever 21">Forever 21</option>
+            </select>
             <div th:if="${#fields.hasErrors('brandName')}" class="error">
                 <p th:errors="*{brandName}">Ошибка в бренде</p>
             </div>

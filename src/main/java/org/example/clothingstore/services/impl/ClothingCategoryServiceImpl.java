@@ -9,11 +9,15 @@ import org.example.clothingstore.services.ClothingCategoryService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@EnableCaching
 public class ClothingCategoryServiceImpl implements ClothingCategoryService {
 
     private final ClothingCategoryRepository clothingCategoryRepository;
@@ -28,6 +32,7 @@ public class ClothingCategoryServiceImpl implements ClothingCategoryService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "clothingCategories", allEntries = true)
     public void addClothingCategory(String categoryName, SeasonEnum season) {
         ClothingCategoryDTO clothingCategoryDto = new ClothingCategoryDTO();
         clothingCategoryDto.setCategoryName(categoryName);
@@ -46,11 +51,13 @@ public class ClothingCategoryServiceImpl implements ClothingCategoryService {
     }
 
     @Override
+    @Cacheable("clothingCategories")
     public List<ClothingCategory> findAll() {
         return this.clothingCategoryRepository.findAll();
     }
 
     @Override
+    @Cacheable("clothingCategories")
     public ClothingCategory findByCategoryName(String categoryName) {
         return clothingCategoryRepository.findByCategoryName(categoryName);
     }

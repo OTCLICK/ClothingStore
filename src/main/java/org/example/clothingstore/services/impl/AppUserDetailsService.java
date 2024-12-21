@@ -1,10 +1,10 @@
 package org.example.clothingstore.services.impl;
 
 import org.example.clothingstore.repositories.UserRepository;
-import org.example.clothingstore.services.UserDetailsService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.stream.Collectors;
@@ -19,7 +19,9 @@ public class AppUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findOptionalByUsername(username)
+        System.out.println("CALL HERE");
+        return userRepository
+                .findOptionalByUsername(username)
                 .map(u -> new User(
                         u.getUsername(),
                         u.getPassword(),

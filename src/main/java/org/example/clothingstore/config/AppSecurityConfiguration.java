@@ -2,13 +2,13 @@ package org.example.clothingstore.config;
 
 import org.example.clothingstore.entities.UserRolesEnum;
 import org.example.clothingstore.repositories.UserRepository;
-import org.example.clothingstore.services.UserDetailsService;
 import org.example.clothingstore.services.impl.AppUserDetailsService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -36,19 +36,19 @@ public class AppSecurityConfiguration {
                         .requestMatchers("/", "/users/login", "/users/register", "/users/login-error", "/test/authenticate")
                         .permitAll().
                         requestMatchers("/users/profile").authenticated().
-                        requestMatchers("/products/", "/orders/", "/orders/create").hasAnyRole(UserRolesEnum.CUSTOMER.name(),
-                                UserRolesEnum.ADMIN.name()).
-                        requestMatchers("/products/create-product", "/products/**", "/coupons/create-coupon", "/coupons/**")
+                        requestMatchers("/products/**",  "/orders/**", "/coupons/**")
+                        .hasAnyRole(UserRolesEnum.CUSTOMER.name(), UserRolesEnum.ADMIN.name()).
+                        requestMatchers("/admin/**")
                         .hasRole(UserRolesEnum.ADMIN.name()).
                         anyRequest().authenticated()).formLogin(
-                (formLogin) ->
-                        formLogin.
-                                loginPage("/users/login").
-                                usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY).
-                                passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY).
-                                defaultSuccessUrl("/").
-                                failureForwardUrl("/users/login-error")
-        )
+                        (formLogin) ->
+                                formLogin.
+                                        loginPage("/users/login").
+                                        usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY).
+                                        passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY).
+                                        defaultSuccessUrl("/").
+                                        failureForwardUrl("/users/login-error")
+                )
                 .logout((logout) ->
                         logout.logoutUrl("/users/logout").
                                 logoutSuccessUrl("/").
@@ -62,8 +62,10 @@ public class AppSecurityConfiguration {
 
     @Bean
     public SecurityContextRepository securityContextRepository() {
-        return new DelegatingSecurityContextRepository(new RequestAttributeSecurityContextRepository(),
-                new HttpSessionSecurityContextRepository());
+        return new DelegatingSecurityContextRepository(
+                new RequestAttributeSecurityContextRepository(),
+                new HttpSessionSecurityContextRepository()
+        );
     }
 
     @Bean

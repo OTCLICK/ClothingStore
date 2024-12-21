@@ -17,7 +17,9 @@ public interface DiscountCouponService {
     String createDiscountCoupon(String categoryName, String brandName,
                                 float discountPercentage, float minOrderAmount);
     void deleteDiscountCoupon(String id);
-    public List<DiscountCouponDTO> getAvailableCouponsForOrder(Order order);
+    List<DiscountCouponDTO> getAvailableCouponsForOrder(Order order);
+    List<DiscountCoupon> getTopBrands(int limit);
+    List<DiscountCoupon> getTopCategories(int limit);
 
 
 }

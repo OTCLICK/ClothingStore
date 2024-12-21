@@ -38,8 +38,16 @@ public class UserRepositoryImpl extends BaseCURepository<User> implements UserRe
 
     @Override
     public Optional<User> findOptionalByUsername(String username) {
-        return Optional.of(em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class).
-                setParameter("username", username).getSingleResult());
+        try {
+            System.out.println("CALL");
+
+            return Optional.ofNullable(
+                    em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class).
+                            setParameter("username", username).getSingleResult()
+            );
+        } catch (Exception exception) {
+            return Optional.empty();
+        }
     }
 
     @Override

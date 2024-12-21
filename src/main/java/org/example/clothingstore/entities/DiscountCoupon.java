@@ -2,10 +2,12 @@ package org.example.clothingstore.entities;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "discount_coupon")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class DiscountCoupon extends BaseEntity {
+public class DiscountCoupon extends BaseEntity implements Serializable {
 
     private ClothingCategory clothingCategory;
     private Brand brand;
@@ -21,7 +23,7 @@ public class DiscountCoupon extends BaseEntity {
 
     protected DiscountCoupon() {}
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "clothing_category_id", referencedColumnName = "id", nullable = false)
     public ClothingCategory getClothingCategory() {
         return clothingCategory;
@@ -31,7 +33,7 @@ public class DiscountCoupon extends BaseEntity {
         this.clothingCategory = clothingCategory;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brand_id", referencedColumnName = "id", nullable = false)
     public Brand getBrand() {
         return brand;

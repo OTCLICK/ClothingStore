@@ -35,7 +35,7 @@ public class Product extends BaseEntity {
 
     protected Product() {}
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "clothing_category_id", referencedColumnName = "id", nullable = false)
     public ClothingCategory getClothingCategory() {
         return clothingCategory;
@@ -45,7 +45,7 @@ public class Product extends BaseEntity {
         this.clothingCategory = clothingCategory;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brand_id", referencedColumnName = "id")
     public Brand getBrand() {
         return brand;

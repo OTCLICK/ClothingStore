@@ -1,5 +1,6 @@
 package org.example.clothingstore.services.impl;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import org.example.clothingstore.dto.OrderDTO;
 import org.example.clothingstore.dto.ProductDTO;
@@ -13,6 +14,9 @@ import org.example.clothingstore.services.OrderService;
 import org.example.clothingstore.services.UserService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@EnableCaching
 public class OrderServiceImpl implements OrderService {
 
     public final OrderRepository orderRepository;
@@ -40,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "orders", allEntries = true)
     public void addOrder(OrderDTO orderDto) {
         if (!this.validationUtil.isValid(orderDto)) {
             this.validationUtil.violations(orderDto).stream().map(ConstraintViolation::getMessage).
@@ -53,6 +59,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+//    @Cacheable("orders")
     public Page<OrderDTO> getOrders(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Order> couponsPage = orderRepository.findAll(pageable);
@@ -61,6 +68,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+//    @Transactional
+    @Cacheable("orders")
     public OrderDTO getOrder(String id) {
         try {
             var order = orderRepository.findById(id);
@@ -73,6 +82,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "orders", allEntries = true)
     public String createOrder(String username, float discountPercentage, Date date, float orderAmount,
                               String orderStatus, int quantityOfProducts) {
         Order newOrder = new Order(userService.findByUsername(username),
@@ -83,16 +93,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Cacheable("orders")
     public List<Order> getOrdersByStatus(OrderStatusEnum status) {
         return orderRepository.findByStatus(status);
     }
 
     @Override
+//    @Cacheable("orders")
     public Order getOrderById(String id) {
         return orderRepository.findById(id);
     }
 
     @Override
+    @CacheEvict(cacheNames = "orders", allEntries = true)
     public void save(Order order) {
         orderRepository.save(order);
     }

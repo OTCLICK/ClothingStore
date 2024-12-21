@@ -8,10 +8,7 @@
 //import org.springframework.boot.CommandLineRunner;
 //import org.springframework.stereotype.Component;
 //
-//import java.util.ArrayList;
-//import java.util.Date;
-//import java.util.List;
-//import java.util.Random;
+//import java.util.*;
 //import java.util.concurrent.TimeUnit;
 //
 //@Component
@@ -24,6 +21,18 @@
 //    private final UserRepository userRepository;
 //    private final OrderRepository orderRepository;
 //    private final UserRolesRepository rolesRepository;
+//    private static final String[] CATEGORIES = {
+//            "T-shirt", "Jeans", "Jacket", "Dress", "Skirt", "Shorts", "Sweater",
+//            "Suit", "Coat", "Activewear", "Loungewear", "Pajamas", "Swimwear",
+//            "Footwear", "Accessories"
+//    };
+//    private static final String[] BRANDS = {
+//            "Nike", "Adidas", "Puma", "Levi's", "Zara", "H&M", "Uniqlo",
+//            "Gucci", "Prada", "Chanel", "Under Armour", "Reebok", "Lacoste",
+//            "Tommy Hilfiger", "Calvin Klein", "Forever 21"
+//    };
+//    private Set<String> generatedCategories = new HashSet<>();
+//    private Set<String> generatedBrands = new HashSet<>();
 //
 //    @Autowired
 //    public DataLoader(ClothingCategoryRepository clothingCategoryRepository, BrandRepository brandRepository,
@@ -45,16 +54,25 @@
 //        Random random = new Random();
 //
 //        List<ClothingCategory> categories = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            String categoryName = faker.commerce().department();
+//        for (int i = 0; i < 15; i++) {
+//            String categoryName;
+//            do {
+//                categoryName = CATEGORIES[random.nextInt(CATEGORIES.length)];
+//            } while (generatedCategories.contains(categoryName));
+//            generatedCategories.add(categoryName);
 //            SeasonEnum season = SeasonEnum.values()[random.nextInt(SeasonEnum.values().length)];
 //            categories.add(new ClothingCategory(categoryName, season));
 //        }
 //        clothingCategoryRepository.saveAll(categories);
 //
 //        List<Brand> brands = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            String brandName = faker.company().name();
+//        for (int i = 0; i < 15; i++) {
+//            String brandName;
+//            do {
+//                brandName = BRANDS[random.nextInt(BRANDS.length)];
+//            } while (generatedBrands.contains(brandName));
+//
+//            generatedBrands.add(brandName);
 //            brands.add(new Brand(brandName));
 //        }
 //        brandRepository.saveAll(brands);
@@ -66,7 +84,7 @@
 //            String productName = faker.commerce().productName();
 //            String color = faker.commerce().color();
 //            String size = faker.options().option("S", "M", "L", "XL", "XXL", "XXXL");
-//            float price = Float.parseFloat(faker.commerce().price().replace("$", "").replace(",", ""));
+//            float price = 20 * Float.parseFloat(faker.commerce().price().replace("$", "₽").replace(",", ""));
 //            products.add(new Product(category, brand, productName, color, size, price));
 //        }
 //        productRepository.saveAll(products);
@@ -75,27 +93,27 @@
 //        for (int i = 0; i < 80; i++) {
 //            ClothingCategory category = categories.get(random.nextInt(categories.size()));
 //            Brand brand = brands.get(random.nextInt(brands.size()));
-//            float discountPercentage = random.nextFloat() * 100; // Скидка от 0 до 100%
-//            float minOrderAmount = Float.parseFloat(faker.commerce().price().replace("$", "").replace(",", ""));
+//            float discountPercentage = 5 + random.nextFloat() * 90;
+//            float minOrderAmount = 10 * Float.parseFloat(faker.commerce().price().replace("$", "₽").replace(",", ""));
 //            discountCoupons.add(new DiscountCoupon(category, brand, discountPercentage, minOrderAmount));
 //        }
 //        discountCouponRepository.saveAll(discountCoupons);
 //
-//        if (rolesRepository.count() == 0) {
-//            var customerRole = new Role(UserRolesEnum.CUSTOMER);
-//            var adminRole = new Role(UserRolesEnum.ADMIN);
-//            rolesRepository.save(customerRole);
-//            rolesRepository.save(adminRole);
-//        }
+////        if (rolesRepository.count() == 0) {
+////            var customerRole = new Role(UserRolesEnum.CUSTOMER);
+////            var adminRole = new Role(UserRolesEnum.ADMIN);
+////            rolesRepository.save(customerRole);
+////            rolesRepository.save(adminRole);
+////        }
 //
-//        var customerRole = rolesRepository.findRoleByName(UserRolesEnum.CUSTOMER).orElseThrow();
-//        var customerUser = new User("customer", "customer", "customer123",
-//                "ivan.budko.04@mail.ru", "89201234567");
-//        customerUser.setRoles(List.of(customerRole));
-//        userRepository.save(customerUser);
+////        var customerRole = rolesRepository.findRoleByName(UserRolesEnum.CUSTOMER).orElseThrow();
+////        var customerUser = new User("customer", "customer", "customer123",
+////                "ivan.budko.04@mail.ru", "89201234567");
+////        customerUser.setRoles(List.of(customerRole));
+////        userRepository.save(customerUser);
 //
-//        List<DiscountCoupon> availableCoupons = discountCouponRepository.getAllDiscountCoupons();
-//        List<User> users = userRepository.findAll(); // Получаем всех пользователей для генерации заказов
+////        List<DiscountCoupon> availableCoupons = discountCouponRepository.getAllDiscountCoupons();
+////        List<User> users = userRepository.findAll(); // Получаем всех пользователей для генерации заказов
 //
 ////        List<Order> orders = new ArrayList<>();
 ////        for (int i = 0; i < 25; i++) {

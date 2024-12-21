@@ -44,6 +44,7 @@ public class User extends BaseEntity implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
+    
     @Column(nullable = false)
     public String getPassword() {
         return password;

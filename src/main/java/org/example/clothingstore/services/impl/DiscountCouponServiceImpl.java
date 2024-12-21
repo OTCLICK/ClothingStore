@@ -10,6 +10,9 @@ import org.example.clothingstore.services.ClothingCategoryService;
 import org.example.clothingstore.services.DiscountCouponService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@EnableCaching
 public class DiscountCouponServiceImpl implements DiscountCouponService {
 
     public final DiscountCouponRepository discountCouponRepository;
@@ -37,6 +41,7 @@ public class DiscountCouponServiceImpl implements DiscountCouponService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "discountCoupons", allEntries = true)
     public void addDiscountCoupon(DiscountCouponDTO discountCouponDto) {
         if (!this.validationUtil.isValid(discountCouponDto)) {
             this.validationUtil.violations(discountCouponDto).stream().map(ConstraintViolation::getMessage).
@@ -50,16 +55,19 @@ public class DiscountCouponServiceImpl implements DiscountCouponService {
     }
 
     @Override
+    @Cacheable("discountCoupons")
     public DiscountCoupon findById(String id) {
         return this.discountCouponRepository.findById(id);
     }
 
     @Override
+    @Cacheable("discountCoupons")
     public List<DiscountCoupon> findListByDiscountPercentage(float discountPercentage) {
         return this.discountCouponRepository.findListByDiscountPercentage(discountPercentage);
     }
 
     @Override
+//    @Cacheable("discountCoupons")
     public Page<DiscountCouponDTO> getDiscountCoupons(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<DiscountCoupon> couponsPage = discountCouponRepository.findAll(pageable);
@@ -68,6 +76,7 @@ public class DiscountCouponServiceImpl implements DiscountCouponService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "discountCoupons", allEntries = true)
     public String createDiscountCoupon(String categoryName, String brandName,
                                        float discountPercentage, float minOrderAmount) {
             DiscountCoupon newCoupon = new DiscountCoupon(clothingCategoryService.findByCategoryName(categoryName),
@@ -77,16 +86,19 @@ public class DiscountCouponServiceImpl implements DiscountCouponService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "discountCoupons", allEntries = true)
     public void deleteDiscountCoupon(String id) {
         discountCouponRepository.deleteById(id);
     }
 
     @Override
+    @Cacheable("discountCoupons")
     public DiscountCoupon findByDiscountPercentage(float discountPercentage) {
         return this.discountCouponRepository.findByDiscountPercentage(discountPercentage);
     }
 
     @Override
+//    @Cacheable("discountCoupons")
     public List<DiscountCouponDTO> getAvailableCouponsForOrder(Order order) {
         List<DiscountCoupon> allCoupons = discountCouponRepository.findAllCoupons();
         List<DiscountCouponDTO> availableCoupons = new ArrayList<>();
@@ -108,5 +120,16 @@ public class DiscountCouponServiceImpl implements DiscountCouponService {
         return availableCoupons;
     }
 
+    @Override
+//    @Cacheable("discountCoupons")
+    public List<DiscountCoupon> getTopBrands(int limit) {
+        return discountCouponRepository.findTopBrands(limit);
+    }
+
+    @Override
+//    @Cacheable("discountCoupons")
+    public List<DiscountCoupon> getTopCategories(int limit) {
+        return discountCouponRepository.findTopCategories(limit);
+    }
 }
 

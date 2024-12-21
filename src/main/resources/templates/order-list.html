@@ -33,7 +33,7 @@
                 <a class="nav-link" href="/coupons">Купоны</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/">Профиль</a>
+                <a class="nav-link" href="/users/profile">Профиль</a>
             </li>
         </ul>
     </div>
@@ -41,7 +41,7 @@
 
 <div class="container mt-5">
     <h1 th:text="${model.base.pageTitle}">Список заказов</h1>
-    <p>Пользователь: <span th:text="${model.base.currentUser }">Текущий пользователь</span></p>
+<!--    <p>Пользователь: <span th:text="${model.base.currentUser }">Текущий пользователь</span></p>-->
 
     <form action="#" th:action="@{/orders}" method="get" class="mb-4 d-flex">
         <input type="number" name="page" th:value="${form.page}" min="1" placeholder="Страница" class="form-control d-inline-block w-25 me-2" />

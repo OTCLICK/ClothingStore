@@ -15,6 +15,9 @@ import org.example.clothingstore.services.ProductService;
 import org.example.clothingstore.utils.ValidationUtil;
 import org.example.clothingstorecontracts.viewmodel.ProductViewModel;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@EnableCaching
 public class ProductServiceImpl implements ProductService {
 
     public final ProductRepository productRepository;
@@ -42,6 +46,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "products", allEntries = true)
     public void addProduct(ProductDTO productDto) {
         if (!this.validationUtil.isValid(productDto)) {
             this.validationUtil.violations(productDto).stream().map(ConstraintViolation::getMessage).
@@ -55,11 +60,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable("products")
     public Product findByProductName(String productName) {
         return this.productRepository.findByProductName(productName);
     }
 
     @Override
+//    @Cacheable("products")
     public Page<ProductDTO> getProducts(String searchWord, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Product> productsPage = searchWord != null
@@ -75,6 +82,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "products", allEntries = true)
     public String createProduct(String categoryName, String brandName, String name, String color,
                                 String size, float price) {
         Product newProduct = new Product(clothingCategoryService.findByCategoryName(categoryName),
@@ -84,6 +92,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+//    @Cacheable("products")
     public ProductDTO getProduct(String id) {
         try {
             var product = productRepository.findById(id);
@@ -97,6 +106,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "products", allEntries = true)
     public ProductEditDTO getProductEdit(String id) {
         var product = productRepository.findById(id);
         return new ProductEditDTO(product.getId(), product.getPrice(), product.getProductName(),
@@ -106,12 +116,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "products", allEntries = true)
     public void deleteProduct(String id) {
         productRepository.deleteById(id);
     }
 
     @Transactional
     @Override
+    @CacheEvict(cacheNames = "products", allEntries = true)
     public void updateProduct(ProductEditDTO productEditDto) {
         try {
             var product = productRepository.findById(productEditDto.id());
@@ -129,6 +141,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable("products")
     public Product getProductById(String id) {
         return productRepository.findById(id);
     }

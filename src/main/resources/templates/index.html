@@ -66,10 +66,29 @@
 <header>
     <h1>Добро пожаловать в интернет-магазин одежды!</h1>
 </header>
+<!--<div class="container">-->
+<!--&lt;!&ndash;    <p>Текущий пользователь: <span th:text="${model.base.currentUser }"></span></p>&ndash;&gt;-->
+<!--&lt;!&ndash;    <a href="/products">Перейти к каталогу товаров <i class="fas fa-arrow-right"></i></a>&ndash;&gt;-->
+<!--</div>-->
 <div class="container">
-    <p>Текущий пользователь: <span th:text="${model.base.currentUser }"></span></p>
+    <h2>Топ 5 брендов со скидками</h2>
+    <ul>
+        <li th:each="brand : ${topBrands}">
+            <span th:text="${brand.brand.brandName}"></span> - Скидка до <span th:text="${brand.discountPercentage}"></span> %
+        </li>
+    </ul>
+
+    <h2>Топ 5 категорий одежды со скидками</h2>
+    <ul>
+        <li th:each="category : ${topCategories}">
+            <span th:text="${category.clothingCategory.categoryName}"></span> - Скидка до <span th:text="${category.discountPercentage}"></span> %
+        </li>
+    </ul>
+
     <a href="/products">Перейти к каталогу товаров <i class="fas fa-arrow-right"></i></a>
 </div>
+
+
 <footer>
     <p>&copy; 2024 Интернет-магазин одежды. Все права защищены.</p>
 </footer>

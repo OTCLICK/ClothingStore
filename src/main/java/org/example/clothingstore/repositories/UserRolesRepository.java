@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
+//@Repository
 public interface UserRolesRepository {
     Optional<Role> findRoleByName(UserRolesEnum roleName);
     long count();

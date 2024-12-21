@@ -2,19 +2,76 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Профиль пользователя</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .profile-container {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .profile-header p {
+            font-size: 1.2rem;
+            color: #6c757d;
+        }
+        .profile-info {
+            margin-top: 20px;
+        }
+        .profile-info h4 {
+            margin-bottom: 15px;
+        }
+        .profile-info p {
+            font-size: 1.1rem;
+            color: #343a40;
+        }
+        .btn-edit {
+            margin-top: 20px;
+        }
+        .btn-logout {
+            margin-top: 10px;
+            background-color: #dc3545; /* Красный цвет для кнопки выхода */
+            border-color: #dc3545; /* Красный цвет для границы */
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>Профиль пользователя</h1>
-    <div class="profile-info">
-        <p><strong>Имя пользователя:</strong> <span th:text="${user.username}"></span></p>
-        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
-        <p><strong>Телефон:</strong> <span th:text="${user.phone}"></span></p>
+<div class="container profile-container">
+    <div class="profile-header">
+        <h1>Профиль пользователя</h1>
+        <p>Добро пожаловать, <span th:text="${user.username}">Username</span></p>
     </div>
-    <a th:href="@{/users/logout}" class="logout">Выйти</a>
+    <div class="profile-info">
+        <h4>Информация о пользователе</h4>
+        <p><strong>Полное имя:</strong> <span th:text="${user.fullName}">Full Name</span></p>
+        <p><strong>Email:</strong> <span th:text="${user.email}">Email</span></p>
+        <p><strong>Возраст:</strong> <span th:text="${user.age}">Age</span></p>
+    </div>
+    <div class="text-center">
+        <a th:href="@{/products}" class="btn btn-primary btn-edit">К списку товаров</a>
+        <form th:action="@{/users/logout}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-logout">Выход</button>
+        </form>
+    </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
