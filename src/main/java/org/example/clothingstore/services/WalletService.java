@@ -7,7 +7,6 @@ import org.example.clothingstore.entities.Wallet;
 public interface WalletService {
 
     void createWallet(WalletDTO walletDto);
-//    void updateWallet(WalletDTO walletDto);
     void updateWallet(String id, float amount);
     Wallet getWallet(User user);
 

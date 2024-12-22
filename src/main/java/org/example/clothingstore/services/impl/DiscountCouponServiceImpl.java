@@ -67,7 +67,6 @@ public class DiscountCouponServiceImpl implements DiscountCouponService {
     }
 
     @Override
-//    @Cacheable("discountCoupons")
     public Page<DiscountCouponDTO> getDiscountCoupons(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<DiscountCoupon> couponsPage = discountCouponRepository.findAll(pageable);
@@ -98,7 +97,6 @@ public class DiscountCouponServiceImpl implements DiscountCouponService {
     }
 
     @Override
-//    @Cacheable("discountCoupons")
     public List<DiscountCouponDTO> getAvailableCouponsForOrder(Order order) {
         List<DiscountCoupon> allCoupons = discountCouponRepository.findAllCoupons();
         List<DiscountCouponDTO> availableCoupons = new ArrayList<>();
@@ -121,13 +119,11 @@ public class DiscountCouponServiceImpl implements DiscountCouponService {
     }
 
     @Override
-//    @Cacheable("discountCoupons")
     public List<DiscountCoupon> getTopBrands(int limit) {
         return discountCouponRepository.findTopBrands(limit);
     }
 
     @Override
-//    @Cacheable("discountCoupons")
     public List<DiscountCoupon> getTopCategories(int limit) {
         return discountCouponRepository.findTopCategories(limit);
     }

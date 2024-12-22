@@ -6,7 +6,7 @@
     <title th:text="${model.base.pageTitle}">Детали товара</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/css/styles.css"> <!-- Подключите ваши стили -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> <!-- Подключение Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -66,20 +66,19 @@
 
         .image-container {
             display: flex;
-            justify-content: center; /* Центрирование по горизонтали */
-            align-items: center; /* Центрирование по вертикали */
-            height: 350px; /* Занять всю высоту колонки */
-            padding: 20px; /* Отступы вокруг изображения */
-            box-sizing: border-box; /* Учитывать отступы в расчетах ширины и высоты */
+            justify-content: center;
+            align-items: center;
+            height: 350px;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .product-image {
-            max-width: 100%; /* Убедитесь, что изображение не выходит за пределы колонки */
-            height: auto; /* Поддержка пропорций изображения */
-            display: block; /* Убедитесь, что изображение является блочным элементом */
-            /*margin: 0 auto; !* Центрирование изображения *!*/
+            max-width: 100%;
+            height: auto;
+            display: block;
             margin-right: 300px;
-            padding: 0px; /* Дополнительные отступы для изображения */
+            padding: 0px;
         }
     </style>
 </head>

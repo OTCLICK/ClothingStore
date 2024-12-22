@@ -47,8 +47,8 @@
 //
 //    private void loadUsers() {
 //        if (userRepository.count() == 0) {
-//            loadCustomer();
-//            loadAdmin();
+////            loadCustomer();
+////            loadAdmin();
 //        }
 //    }
 //

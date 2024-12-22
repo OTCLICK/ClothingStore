@@ -98,7 +98,7 @@
             <td>
                 <form th:action="@{/orders/add-product}" method="post">
                     <input type="hidden" name="orderId" th:value="${order.id}"/>
-                    <input type="hidden" name="productId" th:value="${productId}"/> <!-- Передаем productId -->
+                    <input type="hidden" name="productId" th:value="${productId}"/>
                     <button type="submit" class="btn btn-success">Добавить в заказ</button>
                 </form>
             </td>

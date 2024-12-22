@@ -28,7 +28,6 @@
 <body>
 <div class="container">
     <h1 th:text="${model.base.pageTitle}">Добавление купона</h1>
-<!--    <p th:text="'Текущий пользователь: ' + ${model.base.currentUser }"></p>-->
 
     <form th:action="@{/admin/coupons/create-coupon}" th:object="${form}" method="post">
         <div class="form-group">

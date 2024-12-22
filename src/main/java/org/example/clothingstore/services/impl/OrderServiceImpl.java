@@ -53,8 +53,6 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("Illegal arguments while saving order");
         }
         Order order = this.modelMapper.map(orderDto, Order.class);
-//        order.setUser(userService.findByUsername(orderDto.getUser().getUsername()));
-//        order.setDiscountCoupon(discountCouponService.findById(orderDto.getDiscountCoupon().getId()));
         orderRepository.save(order);
     }
 

@@ -116,7 +116,6 @@
 
 <div class="container">
     <h1 th:text="${model.base.pageTitle}">Список купонов</h1>
-<!--    <p>Пользователь: <span th:text="${model.base.currentUser  }">Текущий пользователь</span></p>-->
     <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
     <a href="/admin/coupons/create-coupon" class="btn">Создать купон</a>
     </div>
