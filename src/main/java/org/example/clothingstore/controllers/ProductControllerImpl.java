@@ -1,5 +1,6 @@
 package org.example.clothingstore.controllers;
 
+import org.apache.logging.log4j.Level;
 import org.example.clothingstore.dto.OrderDTO;
 import org.example.clothingstore.entities.Order;
 import org.example.clothingstore.entities.OrderStatusEnum;
@@ -12,8 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.security.Principal;
 import java.util.List;
+//import java.util.logging.LogManager;
+//import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Controller
@@ -22,6 +28,7 @@ public class ProductControllerImpl implements ProductController {
 
     private final ProductService productService;
     private final OrderService orderService;
+    private static final Logger LOG = LogManager.getLogger(Controller.class);
 
     @Autowired
     public ProductControllerImpl(ProductService productService, OrderService orderService) {
@@ -35,7 +42,8 @@ public class ProductControllerImpl implements ProductController {
 
     @Override
     @GetMapping
-    public String listProducts(@ModelAttribute("form") ProductSearchForm form, Model model) {
+    public String listProducts(@ModelAttribute("form") ProductSearchForm form, Model model, Principal principal) {
+        LOG.log(Level.INFO, "Показать все товары для " + principal.getName());
         var searchTerm = form.searchWord() != null ? form.searchWord() : "";
         int page = form.page() != null ? form.page() : 1;
         int size = form.size() != null ? form.size() : 10;
@@ -110,3 +118,7 @@ public class ProductControllerImpl implements ProductController {
 
 
 }
+
+
+
+

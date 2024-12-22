@@ -59,15 +59,6 @@ public class UserRepositoryImpl extends BaseCURepository<User> implements UserRe
         return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
     }
 
-
-//    @Override
-//    public Optional<User> findOptionalByPhone(String phone) {
-//        List<User> users = em.createQuery("SELECT u FROM User u WHERE u.phone = :phone", User.class).
-//                setParameter("phone", phone).getResultList();
-//
-//        return users.isEmpty() ? Optional.empty() : Optional.of(users.get(0));
-//    }
-
     @Override
     public long count() {
         return em.createQuery("SELECT COUNT(u) FROM User u", Long.class).getSingleResult();

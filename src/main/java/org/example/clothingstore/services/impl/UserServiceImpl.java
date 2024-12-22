@@ -43,8 +43,6 @@ public class UserServiceImpl implements UserService {
             try {
                 User user = modelMapper.map(userDTO, User.class);
                 this.userRepository.save(user);
-//                Wallet wallet = new Wallet(userRepository.findByUsername(username), 0);
-//                this.walletRepository.save(wallet);
             } catch (Exception e) {
                 System.out.println("Error while saving user: " + e.getMessage());
             }
