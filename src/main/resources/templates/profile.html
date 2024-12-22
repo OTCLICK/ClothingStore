@@ -45,8 +45,8 @@
         }
         .btn-logout {
             margin-top: 10px;
-            background-color: #dc3545; /* Красный цвет для кнопки выхода */
-            border-color: #dc3545; /* Красный цвет для границы */
+            background-color: #dc3545;
+            border-color: #dc3545;
         }
     </style>
 </head>
@@ -61,8 +61,10 @@
         <p><strong>Полное имя:</strong> <span th:text="${user.fullName}">Full Name</span></p>
         <p><strong>Email:</strong> <span th:text="${user.email}">Email</span></p>
         <p><strong>Возраст:</strong> <span th:text="${user.age}">Age</span></p>
+        <p><strong>Баланс:</strong> <span th:text="${user.amount}">Balance</span></p>
     </div>
     <div class="text-center">
+        <a th:href="@{/wallet/{id}(id=${user.id})}" class="btn btn-primary btn-edit">Пополнить баланс</a>
         <a th:href="@{/products}" class="btn btn-primary btn-edit">К списку товаров</a>
         <form th:action="@{/users/logout}" method="post" style="display:inline;">
             <button type="submit" class="btn btn-logout">Выход</button>

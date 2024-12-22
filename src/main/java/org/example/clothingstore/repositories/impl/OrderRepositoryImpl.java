@@ -3,10 +3,7 @@ package org.example.clothingstore.repositories.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import org.example.clothingstore.entities.DiscountCoupon;
-import org.example.clothingstore.entities.Order;
-import org.example.clothingstore.entities.OrderStatusEnum;
-import org.example.clothingstore.entities.Product;
+import org.example.clothingstore.entities.*;
 import org.example.clothingstore.repositories.BaseCRepository;
 import org.example.clothingstore.repositories.OrderRepository;
 import org.springframework.data.domain.Page;
@@ -69,5 +66,12 @@ public class OrderRepositoryImpl extends BaseCRepository<Order> implements Order
     @Transactional
     public void update(Order order) {
         em.merge(order);
+    }
+
+    @Override
+    public User findUserByOrderId(String orderId) {
+        return em.createQuery("SELECT u FROM User u JOIN Order o ON u.id = o.user.id WHERE o.id = :orderId", User.class)
+                .setParameter("orderId", orderId)
+                .getSingleResult();
     }
 }

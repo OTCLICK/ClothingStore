@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class CountryOfOriginServiceImpl implements CountryOfOriginService {
 
-    public final CountryOfOriginRepository countryOfOriginRepository;
-    public final ValidationUtil validationUtil;
-    public final ModelMapper modelMapper;
-    public final BrandService brandService;
+    private final CountryOfOriginRepository countryOfOriginRepository;
+    private final ValidationUtil validationUtil;
+    private final ModelMapper modelMapper;
+    private final BrandService brandService;
 
     @Autowired
     public CountryOfOriginServiceImpl(CountryOfOriginRepository countryOfOriginRepository, ValidationUtil validationUtil,

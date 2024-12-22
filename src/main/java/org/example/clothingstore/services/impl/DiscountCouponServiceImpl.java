@@ -25,11 +25,11 @@ import java.util.List;
 @EnableCaching
 public class DiscountCouponServiceImpl implements DiscountCouponService {
 
-    public final DiscountCouponRepository discountCouponRepository;
-    public final ValidationUtil validationUtil;
-    public final ModelMapper modelMapper;
-    public final BrandService brandService;
-    public final ClothingCategoryService clothingCategoryService;
+    private final DiscountCouponRepository discountCouponRepository;
+    private final ValidationUtil validationUtil;
+    private final ModelMapper modelMapper;
+    private final BrandService brandService;
+    private final ClothingCategoryService clothingCategoryService;
 
     public DiscountCouponServiceImpl(DiscountCouponRepository discountCouponRepository,
                                      ValidationUtil validationUtil, ModelMapper modelMapper, BrandService brandService, ClothingCategoryService clothingCategoryService) {

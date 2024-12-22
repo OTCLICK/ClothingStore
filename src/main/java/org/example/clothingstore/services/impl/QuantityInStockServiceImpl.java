@@ -15,10 +15,10 @@ import java.util.List;
 @Service
 public class QuantityInStockServiceImpl implements QuantityInStockService {
 
-    public final QuantityInStockRepository quantityInStockRepository;
-    public final ValidationUtil validationUtil;
-    public final ModelMapper modelMapper;
-    public final ProductService productService;
+    private final QuantityInStockRepository quantityInStockRepository;
+    private final ValidationUtil validationUtil;
+    private final ModelMapper modelMapper;
+    private final ProductService productService;
 
     public QuantityInStockServiceImpl(QuantityInStockRepository quantityInStockRepository, ValidationUtil validationUtil,
                                       ModelMapper modelMapper, ProductService productService) {

@@ -77,4 +77,9 @@ public class UserRepositoryImpl extends BaseCURepository<User> implements UserRe
     public List<User> findAll() {
         return em.createQuery("SELECT u FROM User u", User.class).getResultList();
     }
+
+    @Override
+    public User findById(String id) {
+        return em.find(User.class, id);
+    }
 }

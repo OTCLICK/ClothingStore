@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${model.base.pageTitle}">Пополнение баланса</title>
+    <!-- Подключение Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+            max-width: 500px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${model.base.pageTitle}">Пополнение баланса</h1>
+
+    <form th:action="@{/wallet/{id}(id=${form.id})}" th:object="${form}" method="post">
+        <div class="form-group">
+            <label for="amount">Перевод:</label>
+            <input type="number" id="amount" th:field="*{amount}" class="form-control" placeholder="Введите сумму" min="50" required />
+            <div th:if="${#fields.hasErrors('amount')}" class="error">
+                <p th:errors="*{amount}">Ошибка в сумме</p>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Перевести</button>
+        <a href="/users/profile" class="btn btn-secondary btn-block">Назад</a>
+    </form>
+</div>
+
+<!-- Подключение Bootstrap JS (опционально) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

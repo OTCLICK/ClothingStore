@@ -30,11 +30,11 @@ import java.util.List;
 @EnableCaching
 public class ProductServiceImpl implements ProductService {
 
-    public final ProductRepository productRepository;
-    public final ValidationUtil validationUtil;
-    public final ModelMapper modelMapper;
-    public final ClothingCategoryService clothingCategoryService;
-    public final BrandService brandService;
+    private final ProductRepository productRepository;
+    private final ValidationUtil validationUtil;
+    private final ModelMapper modelMapper;
+    private final ClothingCategoryService clothingCategoryService;
+    private final BrandService brandService;
 
     public ProductServiceImpl(ProductRepository productRepository, ValidationUtil validationUtil, ModelMapper modelMapper,
                               ClothingCategoryService clothingCategoryService, BrandService brandService) {

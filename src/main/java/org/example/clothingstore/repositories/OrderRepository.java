@@ -3,6 +3,7 @@ package org.example.clothingstore.repositories;
 import org.example.clothingstore.entities.DiscountCoupon;
 import org.example.clothingstore.entities.Order;
 import org.example.clothingstore.entities.OrderStatusEnum;
+import org.example.clothingstore.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -22,6 +23,8 @@ public interface OrderRepository {
     void updateOrderStatus(String orderId, OrderStatusEnum newStatus);
 
     void update(Order order);
+
+    User findUserByOrderId(String orderId);
 
 
 }

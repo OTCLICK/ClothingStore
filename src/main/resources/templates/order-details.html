@@ -61,7 +61,7 @@
     </form>
 
 
-    <form th:action="@{/orders/pay(orderId=${model.orderViewModel.id})}" method="post">
+    <form th:action="@{/orders/pay(orderId=${model.orderViewModel.id}, orderAmount=${model.orderViewModel.amount})}" method="post">
         <button type="submit" class="btn btn-primary">Оплатить заказ</button>
     </form>
 

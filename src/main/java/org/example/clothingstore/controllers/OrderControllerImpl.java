@@ -1,26 +1,24 @@
 package org.example.clothingstore.controllers;
 
 import org.example.clothingstore.dto.*;
-import org.example.clothingstore.entities.DiscountCoupon;
-import org.example.clothingstore.entities.Order;
-import org.example.clothingstore.entities.OrderStatusEnum;
-import org.example.clothingstore.entities.Product;
+import org.example.clothingstore.entities.*;
 import org.example.clothingstore.repositories.DiscountCouponRepository;
 import org.example.clothingstore.repositories.OrderRepository;
 import org.example.clothingstore.repositories.ProductRepository;
 import org.example.clothingstore.repositories.UserRepository;
-import org.example.clothingstore.services.DiscountCouponService;
-import org.example.clothingstore.services.OrderService;
-import org.example.clothingstore.services.ProductService;
+import org.example.clothingstore.services.*;
 import org.example.clothingstorecontracts.controllers.OrderController;
 import org.example.clothingstorecontracts.input.*;
 import org.example.clothingstorecontracts.viewmodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -36,17 +34,22 @@ public class OrderControllerImpl implements OrderController {
     private final OrderRepository orderRepository;
     private final DiscountCouponService discountCouponService;
     private final DiscountCouponRepository discountCouponRepository;
+    private final WalletService walletService;
+    private final UserService userService;
 
     @Autowired
     public OrderControllerImpl(OrderService orderService, UserRepository userRepository, ProductService productService,
                                OrderRepository orderRepository, DiscountCouponService discountCouponService,
-                               DiscountCouponRepository discountCouponRepository) {
+                               DiscountCouponRepository discountCouponRepository, WalletService walletService,
+                               UserService userService) {
         this.orderService = orderService;
         this.userRepository = userRepository;
         this.productService = productService;
         this.orderRepository = orderRepository;
         this.discountCouponService = discountCouponService;
         this.discountCouponRepository = discountCouponRepository;
+        this.walletService = walletService;
+        this.userService = userService;
     }
 
     public BaseViewModel createBaseViewModel(String title, String user) {
@@ -98,48 +101,28 @@ public class OrderControllerImpl implements OrderController {
                 order.getUser().getUsername(), discountCoupon, availableCoupons);
 
         model.addAttribute("model", viewModel);
-        return "order-details"; // Убедитесь, что это правильное имя шаблона
+        return "order-details";
     }
-
-
-
-//    @Override
-//    @GetMapping("/{orderId}")
-//    public String orderDetails(@PathVariable String orderId, Model model) {
-//        var order = orderService.getOrder(orderId);
-//        if (order == null) {
-//            System.out.println("Заказ не найден, перенаправление на /orders");
-//            return "redirect:/orders";
-//        }
-//
-//        Float discountCoupon = (order.getDiscountCoupon() != null) ? order.getDiscountCoupon().getDiscountPercentage() : null;
-//
-//        var viewModel = new OrderDetailsViewModel(
-//                new OrderViewModel(orderId,
-//                        createBaseViewModel("Детали заказа", "Текущий пользователь"), order.getDate(),
-//                        order.getOrderAmount(), String.valueOf(order.getOrderStatus()), order.getQuantityOfProducts()),
-//                order.getUser ().getUsername(), discountCoupon);
-//
-//        model.addAttribute("model", viewModel);
-//        return "order-details";
-//    }
-
-//    @Override
-//    @GetMapping("/create-order")
-//    public String createOrderForm(Model model) {
-//        model.addAttribute("form", new OrderAddForm("", "",
-//                "", "", "",
-//                ""));
-//        return "product-create";
-//    }
 
     @Override
     @PostMapping("/create")
     public String createOrder() {
         Date currentDate = new Date();
 
+        // Получаем текущего аутентифицированного пользователя
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName(); // Получаем имя пользователя
+
+        // Находим пользователя в базе данных по имени
+        User currentUser  = userRepository.findByUsername(currentUsername);
+        if (currentUser  == null) {
+            // Обработка случая, когда пользователь не найден
+            System.out.println("Пользователь не найден: " + currentUsername);
+            return "redirect:/error"; // Перенаправление на страницу ошибки
+        }
+
         OrderDTO newOrder = new OrderDTO();
-        newOrder.setUser(userRepository.findByUsername("customer"));
+        newOrder.setUser (currentUser ); // Устанавливаем текущего пользователя
         newOrder.setDate(currentDate);
         newOrder.setOrderStatus(OrderStatusEnum.NOT_PAID);
         newOrder.setOrderAmount(0.0f);
@@ -149,6 +132,7 @@ public class OrderControllerImpl implements OrderController {
 
         return "redirect:/orders/" + newOrder.getId();
     }
+
 
     @PostMapping("/add-product")
     public String addProductToOrder(@RequestParam String orderId, @RequestParam String productId) {
@@ -182,15 +166,37 @@ public class OrderControllerImpl implements OrderController {
 
 
     @PostMapping("/pay")
-    public String payOrder(@RequestParam String orderId) {
-//        Order order = orderRepository.findById(orderId);
-//        order.setOrderStatus(OrderStatusEnum.PAID);
-//        orderService.save(order);
-        orderRepository.updateOrderStatus(orderId, OrderStatusEnum.PAID);
+    public String payOrder(@RequestParam String orderId, RedirectAttributes redirectAttributes) {
+        Order order = orderService.getOrderById(orderId);
+        if (order == null) {
+            System.out.println("Заказ не найден");
+            redirectAttributes.addFlashAttribute("message", "Заказ не найден.");
+            return "redirect:/orders";
+        }
 
+        User user = order.getUser ();
+        if (user == null) {
+            System.out.println("Пользователь не найден для заказа: " + orderId);
+            redirectAttributes.addFlashAttribute("message", "Пользователь не найден.");
+            return "redirect:/orders";
+        }
+
+        Wallet wallet = walletService.getWallet(user);
+
+        if (wallet.getAmount() >= order.getOrderAmount()) {
+            orderRepository.updateOrderStatus(orderId, OrderStatusEnum.PAID);
+            wallet.setAmount(wallet.getAmount() - order.getOrderAmount());
+            walletService.updateWallet(user.getId(), wallet.getAmount());
+            redirectAttributes.addFlashAttribute("message", "Оплата прошла успешно!");
+        } else {
+            System.out.println("Недостаточно средств для оплаты заказа. Баланс: " + wallet.getAmount() + ", Сумма заказа: " + order.getOrderAmount());
+            redirectAttributes.addFlashAttribute("message", "Недостаточно средств для оплаты.");
+        }
 
         return "redirect:/orders";
     }
+
+
 
     @PostMapping("/add-coupon")
     public String addCoupon(@RequestParam String orderId, @RequestParam String couponId) {
@@ -203,7 +209,6 @@ public class OrderControllerImpl implements OrderController {
                 order.setOrderAmount(order.getOrderAmount() - discountAmount);
                 order.setDiscountCoupon(coupon);
                 orderRepository.update(order);
-                System.out.println("Я всё сделал!!!");
             } else {
 
             }

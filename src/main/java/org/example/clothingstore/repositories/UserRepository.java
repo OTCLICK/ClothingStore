@@ -13,6 +13,7 @@ public interface UserRepository {
     void save(User user);
     void update(User user);
     User findByUsername(String username);
+    User findById(String id);
     void saveAll(List<User> users);
     Optional<User> findOptionalByUsername(String username);
     Optional<User> findOptionalByEmail(String email);

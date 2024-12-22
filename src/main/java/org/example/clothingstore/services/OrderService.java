@@ -5,6 +5,7 @@ import org.example.clothingstore.dto.OrderDTO;
 import org.example.clothingstore.dto.ProductDTO;
 import org.example.clothingstore.entities.Order;
 import org.example.clothingstore.entities.OrderStatusEnum;
+import org.example.clothingstore.entities.User;
 import org.springframework.data.domain.Page;
 
 import java.util.Date;
@@ -30,6 +31,8 @@ public interface OrderService {
     Order getOrderById(String id);
 
     void save(Order order);
+
+    User getUserByOrderId(String orderId);
 
 //    public void addProductToOrder(OrderDTO orderDTO, ProductDTO productDTO);
 

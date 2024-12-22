@@ -41,7 +41,11 @@
 
 <div class="container mt-5">
     <h1 th:text="${model.base.pageTitle}">Список заказов</h1>
-<!--    <p>Пользователь: <span th:text="${model.base.currentUser }">Текущий пользователь</span></p>-->
+
+    <!-- Уведомления о статусе оплаты -->
+    <div th:if="${message != null}" class="alert" th:class="${message.contains('успешно') ? 'alert-success' : 'alert-danger'}" role="alert">
+        <span th:text="${message}"></span>
+    </div>
 
     <form action="#" th:action="@{/orders}" method="get" class="mb-4 d-flex">
         <input type="number" name="page" th:value="${form.page}" min="1" placeholder="Страница" class="form-control d-inline-block w-25 me-2" />
@@ -69,6 +73,9 @@
             <td th:text="${order.status}">Статус</td>
             <td th:text="${order.quantityOfProducts}">0</td>
             <td>
+                <form th:action="@{/pay}" method="post" class="d-inline">
+                    <input type="hidden" name="orderId" th:value="${order.id}" />
+                </form>
                 <a th:href="@{/orders/{orderId}(orderId=${order.id})}" class="btn btn-info btn-sm">Детали</a>
             </td>
         </tr>
@@ -93,6 +100,7 @@
         </ul>
     </nav>
 </div>
+
 
 <!-- Модальное окно для создания заказа -->
 <div class="modal fade" id="createOrderModal" tabindex="-1" role="dialog" aria-labelledby="createOrderModalLabel" aria-hidden="true">

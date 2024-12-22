@@ -29,11 +29,11 @@ import java.util.List;
 @EnableCaching
 public class OrderServiceImpl implements OrderService {
 
-    public final OrderRepository orderRepository;
-    public final ValidationUtil validationUtil;
-    public final ModelMapper modelMapper;
-    public final UserService userService;
-    public final DiscountCouponService discountCouponService;
+    private final OrderRepository orderRepository;
+    private final ValidationUtil validationUtil;
+    private final ModelMapper modelMapper;
+    private final UserService userService;
+    private final DiscountCouponService discountCouponService;
 
     public OrderServiceImpl(OrderRepository orderRepository, ValidationUtil validationUtil, ModelMapper modelMapper,
                             UserService userService, DiscountCouponService discountCouponService) {
@@ -108,6 +108,11 @@ public class OrderServiceImpl implements OrderService {
     @CacheEvict(cacheNames = "orders", allEntries = true)
     public void save(Order order) {
         orderRepository.save(order);
+    }
+
+    @Override
+    public User getUserByOrderId(String orderId) {
+        return orderRepository.findUserByOrderId(orderId);
     }
 }
 

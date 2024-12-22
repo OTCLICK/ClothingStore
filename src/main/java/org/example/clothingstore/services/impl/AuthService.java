@@ -3,8 +3,10 @@ package org.example.clothingstore.services.impl;
 import org.example.clothingstore.dto.UserRegistrationDTO;
 import org.example.clothingstore.entities.User;
 import org.example.clothingstore.entities.UserRolesEnum;
+import org.example.clothingstore.entities.Wallet;
 import org.example.clothingstore.repositories.UserRepository;
 import org.example.clothingstore.repositories.UserRolesRepository;
+import org.example.clothingstore.repositories.WalletRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,14 @@ public class AuthService {
 
     private PasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository userRepository, UserRolesRepository rolesRepository, PasswordEncoder passwordEncoder) {
+    private WalletRepository walletRepository;
+
+    public AuthService(UserRepository userRepository, UserRolesRepository rolesRepository, PasswordEncoder passwordEncoder,
+                       WalletRepository walletRepository) {
         this.userRepository = userRepository;
         this.rolesRepository = rolesRepository;
         this.passwordEncoder = passwordEncoder;
+        this.walletRepository = walletRepository;
     }
 
     public void register(UserRegistrationDTO registrationDTO) {
@@ -38,7 +44,7 @@ public class AuthService {
             throw new RuntimeException("email.used");
         }
 
-        var userRole = rolesRepository.findRoleByName(UserRolesEnum.CUSTOMER).orElseThrow();
+        var userRole = rolesRepository.findRoleByName(UserRolesEnum.ADMIN).orElseThrow();
 
         User user = new User(
                 registrationDTO.getUsername(),
@@ -51,6 +57,8 @@ public class AuthService {
         user.setRoles(List.of(userRole));
 
         this.userRepository.save(user);
+        Wallet wallet = new Wallet(userRepository.findByUsername(registrationDTO.getUsername()), 0);
+        this.walletRepository.save(wallet);
     }
 
     public User getUser(String username) {

@@ -3,7 +3,9 @@ package org.example.clothingstore.controllers;
 import jakarta.validation.Valid;
 import org.example.clothingstore.dto.UserRegistrationDTO;
 import org.example.clothingstore.entities.User;
+import org.example.clothingstore.entities.Wallet;
 import org.example.clothingstore.repositories.UserRepository;
+import org.example.clothingstore.services.WalletService;
 import org.example.clothingstore.services.impl.AuthService;
 import org.example.clothingstorecontracts.viewmodel.UserProfileView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +23,15 @@ import java.security.Principal;
 public class AuthController {
 
     private AuthService authService;
+    private WalletService walletService;
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, WalletService walletService) {
         this.authService = authService;
+        this.walletService = walletService;
     }
 
     @ModelAttribute("userRegistrationDTO")
@@ -66,7 +70,6 @@ public class AuthController {
 
         System.out.println(userRepository.findOptionalByUsername(username).get());
 
-        System.out.println("Полный отсос для " + username);
 
         redirectAttributes.addFlashAttribute("badCredentialsMessage", true);
         System.out.println("ОШИБОЧКА");
@@ -78,7 +81,9 @@ public class AuthController {
     public String profile(Principal principal, Model model) {
         String username = principal.getName();
         User user = authService.getUser(username);
-        UserProfileView userProfileView =new UserProfileView(username, user.getEmail(), user.getFullName(), user.getAge());
+        Wallet wallet = walletService.getWallet(user);
+        UserProfileView userProfileView =new UserProfileView(user.getId(), username, user.getEmail(), user.getFullName(), user.getAge(),
+                wallet.getAmount());
         model.addAttribute("user", userProfileView);
         return "profile";
     }
