@@ -51,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
         if (!this.validationUtil.isValid(productDto)) {
             this.validationUtil.violations(productDto).stream().map(ConstraintViolation::getMessage).
                     forEach(System.out::println);
-            throw new IllegalArgumentException("Illegal arguments while saving product");
+            throw new IllegalArgumentException();
         }
         Product product = this.modelMapper.map(productDto, Product.class);
         product.setClothingCategory(clothingCategoryService.findByCategoryName(productDto.getClothingCategory().
@@ -66,7 +66,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-//    @Cacheable("products")
     public Page<ProductDTO> getProducts(String searchWord, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Product> productsPage = searchWord != null
@@ -92,7 +91,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-//    @Cacheable("products")
     public ProductDTO getProduct(String id) {
         try {
             var product = productRepository.findById(id);

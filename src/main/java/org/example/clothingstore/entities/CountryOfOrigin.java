@@ -18,7 +18,7 @@ public class CountryOfOrigin extends BaseEntity {
     protected CountryOfOrigin() {
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brand_id", referencedColumnName = "id", nullable = false)
     public Brand getBrand() {
         return brand;

@@ -1,5 +1,6 @@
 package org.example.clothingstore.controllers;
 
+import jakarta.transaction.Transactional;
 import org.example.clothingstore.dto.*;
 import org.example.clothingstore.entities.*;
 import org.example.clothingstore.repositories.DiscountCouponRepository;
@@ -109,20 +110,17 @@ public class OrderControllerImpl implements OrderController {
     public String createOrder() {
         Date currentDate = new Date();
 
-        // Получаем текущего аутентифицированного пользователя
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName(); // Получаем имя пользователя
+        String currentUsername = authentication.getName();
 
-        // Находим пользователя в базе данных по имени
         User currentUser  = userRepository.findByUsername(currentUsername);
         if (currentUser  == null) {
-            // Обработка случая, когда пользователь не найден
             System.out.println("Пользователь не найден: " + currentUsername);
-            return "redirect:/error"; // Перенаправление на страницу ошибки
+            return "redirect:/error";
         }
 
         OrderDTO newOrder = new OrderDTO();
-        newOrder.setUser (currentUser ); // Устанавливаем текущего пользователя
+        newOrder.setUser (currentUser );
         newOrder.setDate(currentDate);
         newOrder.setOrderStatus(OrderStatusEnum.NOT_PAID);
         newOrder.setOrderAmount(0.0f);
@@ -135,12 +133,13 @@ public class OrderControllerImpl implements OrderController {
 
 
     @PostMapping("/add-product")
+//    @Transactional
     public String addProductToOrder(@RequestParam String orderId, @RequestParam String productId) {
         OrderDTO order = orderService.getOrder(orderId);
 
         ProductDTO productDTO = productService.getProduct(productId);
         if (productDTO == null) {
-            throw new IllegalArgumentException("Product not found with id: " + productId);
+            throw new IllegalArgumentException("Product not found: " + productId);
         }
 
         float newOrderAmount = order.getOrderAmount() + productDTO.getPrice();
@@ -148,7 +147,7 @@ public class OrderControllerImpl implements OrderController {
 
         Order trueOrder = orderRepository.findById(orderId);
         if (trueOrder == null) {
-            throw new IllegalArgumentException("Order not found with id: " + orderId);
+            throw new IllegalArgumentException("Order not: " + orderId);
         }
 
         trueOrder.setOrderAmount(newOrderAmount);

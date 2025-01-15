@@ -18,7 +18,7 @@ public class QuantityInStock {
     protected QuantityInStock() {}
 
     @Id
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
     public Product getProduct() {
         return product;

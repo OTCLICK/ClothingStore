@@ -13,6 +13,7 @@ import org.example.clothingstore.services.DiscountCouponService;
 import org.example.clothingstore.services.OrderService;
 import org.example.clothingstore.services.UserService;
 import org.example.clothingstore.utils.ValidationUtil;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -57,7 +58,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-//    @Cacheable("orders")
     public Page<OrderDTO> getOrders(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Order> couponsPage = orderRepository.findAll(pageable);
@@ -66,7 +66,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-//    @Transactional
     @Cacheable("orders")
     public OrderDTO getOrder(String id) {
         try {
@@ -91,13 +90,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Cacheable("orders")
+    @Transactional
     public List<Order> getOrdersByStatus(OrderStatusEnum status) {
-        return orderRepository.findByStatus(status);
+        List<Order> orders = orderRepository.findByStatus(status);
+        for (Order order : orders) {
+            Hibernate.initialize(order.getProducts());
+        }
+        return orders;
     }
 
+
     @Override
-//    @Cacheable("orders")
     public Order getOrderById(String id) {
         return orderRepository.findById(id);
     }

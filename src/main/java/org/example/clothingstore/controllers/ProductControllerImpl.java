@@ -1,5 +1,6 @@
 package org.example.clothingstore.controllers;
 
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.Level;
 import org.example.clothingstore.dto.OrderDTO;
 import org.example.clothingstore.entities.Order;
@@ -93,6 +94,7 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @GetMapping("/select")
+    @Transactional
     public String selectOrder(@RequestParam String productId, Model model) {
         System.out.println("Полученный productId: " + productId);
 
