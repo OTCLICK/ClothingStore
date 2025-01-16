@@ -127,5 +127,11 @@ public class DiscountCouponServiceImpl implements DiscountCouponService {
     public List<DiscountCoupon> getTopCategories(int limit) {
         return discountCouponRepository.findTopCategories(limit);
     }
+
+    @Override
+    public DiscountCouponDTO getDiscountCouponById(String id) {
+        DiscountCoupon coupon = discountCouponRepository.findById(id);
+        return modelMapper.map(coupon, DiscountCouponDTO.class);
+    }
 }
 

@@ -60,6 +60,7 @@ public class OrderRepositoryImpl extends BaseCRepository<Order> implements Order
             order.setOrderStatus(newStatus);
             em.merge(order);
         }
+        em.persist(order);
     }
 
     @Override

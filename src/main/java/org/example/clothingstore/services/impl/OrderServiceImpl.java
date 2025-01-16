@@ -2,12 +2,11 @@ package org.example.clothingstore.services.impl;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
+import org.example.clothingstore.dto.DiscountCouponDTO;
 import org.example.clothingstore.dto.OrderDTO;
 import org.example.clothingstore.dto.ProductDTO;
-import org.example.clothingstore.entities.Order;
-import org.example.clothingstore.entities.OrderStatusEnum;
-import org.example.clothingstore.entities.Product;
-import org.example.clothingstore.entities.User;
+import org.example.clothingstore.entities.*;
+import org.example.clothingstore.repositories.DiscountCouponRepository;
 import org.example.clothingstore.repositories.OrderRepository;
 import org.example.clothingstore.services.DiscountCouponService;
 import org.example.clothingstore.services.OrderService;
@@ -35,14 +34,17 @@ public class OrderServiceImpl implements OrderService {
     private final ModelMapper modelMapper;
     private final UserService userService;
     private final DiscountCouponService discountCouponService;
+    private final DiscountCouponRepository discountCouponRepository;
 
     public OrderServiceImpl(OrderRepository orderRepository, ValidationUtil validationUtil, ModelMapper modelMapper,
-                            UserService userService, DiscountCouponService discountCouponService) {
+                            UserService userService, DiscountCouponService discountCouponService,
+                            DiscountCouponRepository discountCouponRepository) {
         this.orderRepository = orderRepository;
         this.validationUtil = validationUtil;
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.discountCouponService = discountCouponService;
+        this.discountCouponRepository = discountCouponRepository;
     }
 
     @Override
@@ -70,6 +72,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO getOrder(String id) {
         try {
             var order = orderRepository.findById(id);
+
             return new OrderDTO(order.getId(), order.getUser(), order.getDiscountCoupon(), order.getDate(),
                     order.getOrderAmount(), order.getOrderStatus(), order.getQuantityOfProducts());
         } catch (RuntimeException e) {
@@ -114,6 +117,42 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public User getUserByOrderId(String orderId) {
         return orderRepository.findUserByOrderId(orderId);
+    }
+
+    @Override
+    public void updateOrderAmount(String id, float orderAmount) {
+        Order order = orderRepository.findById(id);
+        order.setOrderAmount(orderAmount);
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void updateQuantityOfProducts(String id) {
+        Order order = orderRepository.findById(id);
+        order.setQuantityOfProducts(order.getQuantityOfProducts() + 1);
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void addProductToOrder(String id, ProductDTO productDTO) {
+        Product product = new Product(productDTO.getId(), productDTO.getClothingCategory(), productDTO.getBrand(),
+                productDTO.getProductName(), productDTO.getColor(), productDTO.getSize(), productDTO.getPrice());
+        Order order = orderRepository.findById(id);
+        order.getProducts().add(product);
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void updateOrderStatus(String id) {
+        orderRepository.updateOrderStatus(id, OrderStatusEnum.PAID);
+    }
+
+    @Override
+    public void updateDiscountCoupon(String id, DiscountCouponDTO discountCouponDTO) {
+        Order order = orderRepository.findById(id);
+        DiscountCoupon discountCoupon = discountCouponRepository.findById(discountCouponDTO.getCouponId());
+        order.setDiscountCoupon(discountCoupon);
+        orderRepository.save(order);
     }
 }
 

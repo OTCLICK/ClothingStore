@@ -20,6 +20,7 @@ public interface DiscountCouponService {
     List<DiscountCouponDTO> getAvailableCouponsForOrder(Order order);
     List<DiscountCoupon> getTopBrands(int limit);
     List<DiscountCoupon> getTopCategories(int limit);
+    DiscountCouponDTO getDiscountCouponById(String id);
 
 
 }

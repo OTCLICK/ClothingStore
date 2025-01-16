@@ -34,6 +34,16 @@ public interface OrderService {
 
     User getUserByOrderId(String orderId);
 
+    void updateOrderAmount(String id, float orderAmount);
+
+    void updateQuantityOfProducts(String id);
+
+    void addProductToOrder(String id, ProductDTO productDTO);
+
+    void updateOrderStatus(String id);
+
+    void updateDiscountCoupon(String id, DiscountCouponDTO discountCouponDTO);
+
 //    public void addProductToOrder(OrderDTO orderDTO, ProductDTO productDTO);
 
 

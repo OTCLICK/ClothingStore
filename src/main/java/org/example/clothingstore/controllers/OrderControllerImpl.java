@@ -30,25 +30,25 @@ import java.util.List;
 public class OrderControllerImpl implements OrderController {
 
     private final OrderService orderService;
-    private final UserRepository userRepository;
+//    private final UserRepository userRepository;
     private final ProductService productService;
-    private final OrderRepository orderRepository;
+//    private final OrderRepository orderRepository;
     private final DiscountCouponService discountCouponService;
-    private final DiscountCouponRepository discountCouponRepository;
+//    private final DiscountCouponRepository discountCouponRepository;
     private final WalletService walletService;
     private final UserService userService;
 
     @Autowired
-    public OrderControllerImpl(OrderService orderService, UserRepository userRepository, ProductService productService,
-                               OrderRepository orderRepository, DiscountCouponService discountCouponService,
-                               DiscountCouponRepository discountCouponRepository, WalletService walletService,
+    public OrderControllerImpl(OrderService orderService, ProductService productService,
+                               DiscountCouponService discountCouponService,
+                               WalletService walletService,
                                UserService userService) {
         this.orderService = orderService;
-        this.userRepository = userRepository;
+//        this.userRepository = userRepository;
         this.productService = productService;
-        this.orderRepository = orderRepository;
+//        this.orderRepository = orderRepository;
         this.discountCouponService = discountCouponService;
-        this.discountCouponRepository = discountCouponRepository;
+//        this.discountCouponRepository = discountCouponRepository;
         this.walletService = walletService;
         this.userService = userService;
     }
@@ -113,14 +113,15 @@ public class OrderControllerImpl implements OrderController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
 
-        User currentUser  = userRepository.findByUsername(currentUsername);
+//        User currentUser  = userRepository.findByUsername(currentUsername);
+        User currentUser = userService.findByUsername(currentUsername);
         if (currentUser  == null) {
             System.out.println("Пользователь не найден: " + currentUsername);
             return "redirect:/error";
         }
 
         OrderDTO newOrder = new OrderDTO();
-        newOrder.setUser (currentUser );
+        newOrder.setUser (currentUser);
         newOrder.setDate(currentDate);
         newOrder.setOrderStatus(OrderStatusEnum.NOT_PAID);
         newOrder.setOrderAmount(0.0f);
@@ -133,31 +134,35 @@ public class OrderControllerImpl implements OrderController {
 
 
     @PostMapping("/add-product")
-//    @Transactional
     public String addProductToOrder(@RequestParam String orderId, @RequestParam String productId) {
         OrderDTO order = orderService.getOrder(orderId);
 
-        ProductDTO productDTO = productService.getProduct(productId);
-        if (productDTO == null) {
-            throw new IllegalArgumentException("Product not found: " + productId);
+        ProductDTO product = productService.getProduct(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("Товар не найден: " + productId);
         }
 
-        float newOrderAmount = order.getOrderAmount() + productDTO.getPrice();
-        int newQuantityOfProducts = order.getQuantityOfProducts() + 1;
+//        float newOrderAmount = order.getOrderAmount() + product.getPrice();
+//        int newQuantityOfProducts = order.getQuantityOfProducts() + 1;
+//
+//        Order trueOrder = orderRepository.findById(orderId);
+//        if (trueOrder == null) {
+//            throw new IllegalArgumentException("Order not: " + orderId);
+//        }
+//
+//        trueOrder.setOrderAmount(newOrderAmount);
+//        trueOrder.setQuantityOfProducts(newQuantityOfProducts);
 
-        Order trueOrder = orderRepository.findById(orderId);
-        if (trueOrder == null) {
-            throw new IllegalArgumentException("Order not: " + orderId);
-        }
+        orderService.updateOrderAmount(orderId, order.getOrderAmount() + product.getPrice());
+        orderService.updateQuantityOfProducts(orderId);
 
-        trueOrder.setOrderAmount(newOrderAmount);
-        trueOrder.setQuantityOfProducts(newQuantityOfProducts);
+//        Product productEntity = new Product(product.getId(), product.getClothingCategory(), product.getBrand(),
+//                product.getProductName(), product.getColor(), product.getSize(), product.getPrice());
+//
+//        trueOrder.getProducts().add(productEntity);
+//        orderRepository.save(trueOrder);
 
-        Product productEntity = new Product(productDTO.getId(), productDTO.getClothingCategory(), productDTO.getBrand(),
-                productDTO.getProductName(), productDTO.getColor(), productDTO.getSize(), productDTO.getPrice());
-
-        trueOrder.getProducts().add(productEntity);
-        orderRepository.save(trueOrder);
+        orderService.addProductToOrder(orderId, product);
 
         return "redirect:/orders";
     }
@@ -165,15 +170,17 @@ public class OrderControllerImpl implements OrderController {
 
 
     @PostMapping("/pay")
+//    @Transactional
     public String payOrder(@RequestParam String orderId, RedirectAttributes redirectAttributes) {
-        Order order = orderService.getOrderById(orderId);
+//        Order order = orderService.getOrderById(orderId);
+        OrderDTO order = orderService.getOrder(orderId);
         if (order == null) {
             System.out.println("Заказ не найден");
             redirectAttributes.addFlashAttribute("message", "Заказ не найден.");
             return "redirect:/orders";
         }
 
-        User user = order.getUser ();
+        User user = order.getUser();
         if (user == null) {
             System.out.println("Пользователь не найден для заказа: " + orderId);
             redirectAttributes.addFlashAttribute("message", "Пользователь не найден.");
@@ -183,7 +190,8 @@ public class OrderControllerImpl implements OrderController {
         Wallet wallet = walletService.getWallet(user);
 
         if (wallet.getAmount() >= order.getOrderAmount()) {
-            orderRepository.updateOrderStatus(orderId, OrderStatusEnum.PAID);
+//            orderRepository.updateOrderStatus(orderId, OrderStatusEnum.PAID);
+            orderService.updateOrderStatus(orderId);
             wallet.setAmount(wallet.getAmount() - order.getOrderAmount());
             walletService.updateWallet(user.getId(), wallet.getAmount());
             redirectAttributes.addFlashAttribute("message", "Оплата прошла успешно!");
@@ -198,16 +206,21 @@ public class OrderControllerImpl implements OrderController {
 
 
     @PostMapping("/add-coupon")
+//    @Transactional
     public String addCoupon(@RequestParam String orderId, @RequestParam String couponId) {
-        Order order = orderRepository.findById(orderId);
-        DiscountCoupon coupon = discountCouponRepository.findById(couponId);
-
+//        Order order = orderRepository.findById(orderId);
+        OrderDTO order = orderService.getOrder(orderId);
+//        DiscountCoupon coupon = discountCouponRepository.findById(couponId);
+        DiscountCouponDTO coupon = discountCouponService.getDiscountCouponById(couponId);
         if (order != null && coupon != null) {
             if (order.getOrderAmount() >= coupon.getMinOrderAmount()) {
                 float discountAmount = (order.getOrderAmount() * coupon.getDiscountPercentage()) / 100;
-                order.setOrderAmount(order.getOrderAmount() - discountAmount);
-                order.setDiscountCoupon(coupon);
-                orderRepository.update(order);
+//                order.setOrderAmount(order.getOrderAmount() - discountAmount);
+//                order.setDiscountCoupon(coupon);
+//                orderRepository.update(order);
+                orderService.updateOrderAmount(orderId, order.getOrderAmount() - discountAmount);
+                orderService.updateDiscountCoupon(orderId, coupon);
+
             } else {
 
             }
